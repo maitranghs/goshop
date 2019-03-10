@@ -1,0 +1,32 @@
+{
+  "name": "goshop",
+  "version": "1.0.0",
+  "description": "Making Demo for Turning Challenge",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client": "npm run start --prefix client",
+    "server": "npm run start --prefix server",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maitranghs/goshop.git"
+  },
+  "keywords": [
+    "e-commerce"
+  ],
+  "author": "Shiro",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maitranghs/goshop/issues"
+  },
+  "homepage": "https://github.com/maitranghs/goshop#readme",
+  "devDependencies": {
+    "concurrently": "^4.1.0",
+    "puppeteer": "^1.13.0"
+  },
+  "dependencies": {
+    "jest": "^23.6.0"
+  }
+}
