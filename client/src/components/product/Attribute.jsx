@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 
 class Attribute extends Component {
   render() {
-    const { attribute, setSearchCondition } = this.props,
+    const { attribute } = this.props,
     className = (attribute.name === 'Size') ? 'btn grey-text text-lighten-1 white button-size' : 'btn button-color',
     applyStyle = (type, value) => {
       switch(type) {
@@ -25,8 +25,7 @@ class Attribute extends Component {
         <h6>{attribute.name}</h6>
         <ul className="row">
           {attribute.values.map((attrValue, idx) => (
-            <li key={idx} className="col s1 m1 l1"
-              onClick={() => setSearchCondition({ attribute_value_id: attrValue._id })}>
+            <li key={idx} className="col s1 m1 l1">
               <a href={'#' + attrValue._id}
                 className={className}
                 style={applyStyle(attribute.name, attrValue.value)}>
