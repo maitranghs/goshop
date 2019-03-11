@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom'
 
 class Product extends Component {
   render() {
     const { product } = this.props
     return (
       <div className="col s4 m4">
-        <a href="#!">
+        <Link to={`/product/${product._id}`}>
           <div className="card hoverable small center-align">
             <div className="card-image">
               <img src="https://materializecss.com/images/office.jpg" alt="product"/>
@@ -15,7 +16,7 @@ class Product extends Component {
               <p className="blue-grey-text text-darken-3">${product.price}</p>
             </div>
           </div>
-        </a>
+        </Link>
       </div>
     )
   }

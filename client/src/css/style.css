@@ -1,0 +1,20 @@
+.button-color {
+  margin-bottom: 10px;
+  height: 38px;
+  width: 38px;
+  border-radius: 50%;
+}
+
+.button-size {
+  margin-bottom: 10px;
+  height: 40px;
+  width: 40px;
+  border: 1px #bdbdbd solid;
+  box-shadow: none;
+  padding: 0;
+}
+
+.flip-play-arrow {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}

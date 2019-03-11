@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { setSearchCondition } from '../../actions'
+// import { connect } from 'react-redux'
+// import { setSearchCondition } from '../../actions'
 
 class Attribute extends Component {
   render() {
@@ -25,7 +25,7 @@ class Attribute extends Component {
         <h6>{attribute.name}</h6>
         <ul className="row">
           {attribute.values.map((attrValue, idx) => (
-            <li key={idx} className="col s3 m3 l3"
+            <li key={idx} className="col s1 m1 l1"
               onClick={() => setSearchCondition({ attribute_value_id: attrValue._id })}>
               <a href={'#' + attrValue._id}
                 className={className}
@@ -40,7 +40,7 @@ class Attribute extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  setSearchCondition: (option) => dispatch(setSearchCondition(option))
-})
-export default connect(null, mapDispatchToProps)(Attribute)
+// const mapDispatchToProps = (dispatch) => ({
+//   setSearchCondition: (option) => dispatch(setSearchCondition(option))
+// })
+export default Attribute

@@ -1,10 +1,12 @@
 import { SET_PRODUCTS,
         SET_SEARCH_PRODUCTS_CONDITIONS,
-        RESET_SEARCH_PRODUCTS_CONDITIONS } from '../actions/type'
+        RESET_SEARCH_PRODUCTS_CONDITIONS,
+        FETCH_PRODUCT } from '../actions/type'
 
 const initialState = {
   list: [],
-  options: {}
+  options: {},
+  detail: {}
 }
 
 export const reducer = (state=initialState, action) => {
@@ -17,6 +19,8 @@ export const reducer = (state=initialState, action) => {
       return { ...state, options: { ...state.options, ...payload.option } }
     case RESET_SEARCH_PRODUCTS_CONDITIONS:
       return { ...state, options: {} }
+    case FETCH_PRODUCT:
+      return { ...state, detail: payload.product }
     default:
       return state
   }

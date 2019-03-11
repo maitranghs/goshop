@@ -1,4 +1,7 @@
-import { SET_PRODUCTS, SET_SEARCH_PRODUCTS_CONDITIONS, RESET_SEARCH_PRODUCTS_CONDITIONS } from '../actions/type'
+import { SET_PRODUCTS,
+        SET_SEARCH_PRODUCTS_CONDITIONS,
+        RESET_SEARCH_PRODUCTS_CONDITIONS,
+        FETCH_PRODUCT } from '../actions/type'
 
 export const setProducts = (products) => ({
   type: SET_PRODUCTS,
@@ -17,4 +20,11 @@ export const setSearchCondition = (option) => ({
 
 export const resetSearchCondition = () => ({
   type: RESET_SEARCH_PRODUCTS_CONDITIONS
+})
+
+export const fetchProductDetail = (product) => ({
+  type: FETCH_PRODUCT,
+  payload: {
+    product
+  }
 })

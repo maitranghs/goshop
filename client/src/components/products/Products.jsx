@@ -8,7 +8,7 @@ import Product from './Product'
 import Breadcrumb from '../Breadcrumb'
 import Loading from '../Loading'
 
-import { initApp } from '../../actions'
+import { searchProducts } from '../../actions'
 
 class Products extends Component {
 
@@ -52,7 +52,7 @@ const mapStateToProps = (state) => ({
   total: state.products.list.length
 })
 const mapDispatchToProps = (dispatch) => ({
-  getProducts: () => dispatch(initApp())
+  getProducts: () => dispatch(searchProducts())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Products)

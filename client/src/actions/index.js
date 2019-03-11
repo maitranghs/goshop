@@ -2,7 +2,7 @@ import * as productsAction from './products'
 import * as departmentAction from './departments'
 import * as attributeAction from './attributes'
 
-const searchProducts = () =>
+export const searchProducts = () =>
   async (dispatch, getState, { axios }) => {
     const { options } = getState().products
     const products = await axios.post('/api/products/s', options)
@@ -18,12 +18,18 @@ export const initApp = () =>
     const attributes = await axios.get('/api/attributes')
     dispatch(attributeAction.setAttributes(attributes.data))
 
-    dispatch(searchProducts())
+    // dispatch(searchProducts())
   }
 
 export const setSearchCondition = (option) =>
-  (dispatch, getState, { axios }) => {
+  (dispatch) => {
     if (option) dispatch(productsAction.setSearchCondition(option))
     else dispatch(productsAction.resetSearchCondition())
     dispatch(searchProducts())
   }
+
+export const fetchProductDetail = (id) =>
+async (dispatch, getState, { axios }) => {
+    const res = await axios.get(`/api/product/${id}`)
+    dispatch(productsAction.fetchProductDetail(res.data))
+}

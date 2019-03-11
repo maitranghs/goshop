@@ -78,7 +78,6 @@ module.exports = (app) => {
       price,
       text } = req.body
 
-    console.log(req.body)
     let products, conditions = []
     if (text) {
       conditions.push({
@@ -175,5 +174,10 @@ module.exports = (app) => {
 
     console.log(products.length)
     res.send(products)
+  })
+  app.get('/api/product/:id', async (req, res) => {
+    const productDetail = await Product.findOne({ _id: req.params.id })
+
+    res.send(productDetail)
   })
 }

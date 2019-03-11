@@ -1,10 +1,8 @@
 import React from 'react'
 
 const Loading = () => (
-  <div>
-    <div className="progress">
-      <div className="indeterminate"></div>
-    </div>
+  <div className="progress">
+    <div className="indeterminate"></div>
   </div>
 )
 
