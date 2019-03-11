@@ -1,30 +1,29 @@
 import * as productsAction from './products'
 import * as departmentAction from './departments'
+import * as attributeAction from './attributes'
 
-export const getAllProducts = () =>
+const searchProducts = () =>
   async (dispatch, getState, { axios }) => {
-    const departments = await axios.get('/api/departments')
-    dispatch(departmentAction.setDepartments({ departments: departments.data }))
-
-    const products = await axios.get('/api/products')
+    const { options } = getState().products
+    const products = await axios.post('/api/products/s', options)
+    dispatch(productsAction.setProducts([]))
     dispatch(productsAction.setProducts(products.data))
   }
 
-export const getProductsByCondition = ({ categoryId, departmentId }) =>
+export const initApp = () =>
   async (dispatch, getState, { axios }) => {
-    if (categoryId) {
-      const products = await axios.get(`/api/products/cat/${categoryId}`)
-      dispatch(productsAction.setProducts(products.data))
-    }
+    const departments = await axios.get('/api/departments')
+    dispatch(departmentAction.setDepartments(departments.data))
 
-    if (departmentId) {
-      const products = await axios.get(`/api/products/dep/${categoryId}`)
-      dispatch(productsAction.setProducts(products.data))
-    }
-    
+    const attributes = await axios.get('/api/attributes')
+    dispatch(attributeAction.setAttributes(attributes.data))
+
+    dispatch(searchProducts())
   }
-export const filterProduct = ({ options }) =>
+
+export const setSearchCondition = (option) =>
   (dispatch, getState, { axios }) => {
-    const products = getState().products
-    console.log(products)
+    if (option) dispatch(productsAction.setSearchCondition(option))
+    else dispatch(productsAction.resetSearchCondition())
+    dispatch(searchProducts())
   }

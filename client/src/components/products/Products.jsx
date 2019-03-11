@@ -8,7 +8,7 @@ import Product from './Product'
 import Breadcrumb from '../Breadcrumb'
 import Loading from '../Loading'
 
-import { getAllProducts } from '../../actions'
+import { initApp } from '../../actions'
 
 class Products extends Component {
 
@@ -27,12 +27,13 @@ class Products extends Component {
               <Filter/>
             </div>
             <div className="col s9">
-              <Breadcrumb/>
+              {false && <Breadcrumb/>}
               {total === 0 && <Loading/>}
               {
                 (total > 0) &&
                 <div>
-                  <h6 className="right-align">Total: {total}</h6>
+                  <h5 className="right-align">Total: {total}</h5>
+                  <div className="divider"></div>
                   <div className="row">
                     {products.map((e,i) => <Product key={i} product={e}/>)}
                   </div>
@@ -47,11 +48,11 @@ class Products extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  products: state.products,
-  total: state.products.length
+  products: state.products.list,
+  total: state.products.list.length
 })
 const mapDispatchToProps = (dispatch) => ({
-  getProducts: () => dispatch(getAllProducts())
+  getProducts: () => dispatch(initApp())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Products)

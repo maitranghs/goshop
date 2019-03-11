@@ -1,63 +1,49 @@
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
+
+import { setSearchCondition } from '../../actions'
+import Loading from '../Loading'
+import Attribute from './Attribute'
 
 class Filter extends Component {
   render() {
+    const { attributes, setSearchCondition } = this.props,
+      priceList = [
+        {
+          price: { from: 0, to: 15 },
+          text: '<$15'
+        },
+        {
+          price: { from: 15, to: 20 },
+          text: '$15 - $20'
+        },
+        {
+          price: { from: 20, to: 100000 },
+          text: '>$20'
+        }
+      ]
     return (
       <div>
         <h5 className="left-align blue-grey-text text-darken-3">Filter</h5>
         <div className="divider"></div>
-        <div className="section">
-          <h6>Color</h6>
-          <ul className="row">
-            {['blue', 'purple', 'orange', 'green', 'red', 'black', 'yellow', 'gray', 'white', 'brown'].map((e,i) => 
-              <li key={i} className="col s2">
-                <a href="#!" className="btn" style={{'backgroundColor': e, 'marginBottom': '10px', height: '34px', width: '34px', 'borderRadius': '50%'}}>&nbsp;</a>
-              </li>
-            )}
-          </ul>
-        </div>
-
-        <div className="section">
-          <h6>Size</h6>
-          <ul className="row">
-            {['XS', 'S', 'M', 'L', 'XL', 28, 29, 30, 31, 32].map((e,i) => 
-              <li className="col s2" key={i}>
-                <a href="#!" className="btn grey-text text-lighten-1 white" style={{'marginBottom': '10px', height: '40px', width: '40px', 'border': '1px #bdbdbd solid', 'boxShadow': 'none', padding: 0}}>{e}</a>
-              </li>
-            )}
-          </ul>
-        </div>
+        {attributes.length === 0 && <Loading/>}
+        {attributes.length > 0 && attributes.map((att, idx) => <Attribute attribute={att} key={idx}/>)}
 
         <div className="section">
           <h6>Price</h6>
-          <p>
-            <label>
-              <input type="radio" name="groupPrice" className="filled-in"/>
-              <span>&#60;$50</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input type="radio" name="groupPrice" className="filled-in"/>
-              <span>$50-100</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input type="radio" name="groupPrice" className="filled-in"/>
-              <span>$100-150</span>
-            </label>
-          </p>
-          <p>
-            <label>
-              <input type="radio" name="groupPrice" className="filled-in"/>
-              <span>&#62;$150</span>
-            </label>
-          </p>
+          {priceList.map(
+            (e, idx) => <p key={idx}>
+              <label onClick={() => setSearchCondition({ price: e.price })}>
+                <input type="radio" name="groupPrice" className="filled-in"/>
+                <span>{e.text}</span>
+              </label>
+            </p>
+          )}
         </div>
 
         <div className="right-align">
-          <a href="#!" className="waves-effect waves-light btn">Clear</a>
+          <a href="#clear_filter" className="waves-effect waves-light btn"
+            onClick={() => setSearchCondition(null)}>Clear</a>
         </div>
 
       </div>
@@ -65,4 +51,10 @@ class Filter extends Component {
   }
 }
 
-export default Filter
+const mapStateToProps = (state) => ({
+  attributes: state.attributes
+})
+const mapDispatchToProps = (dispatch) => ({
+  setSearchCondition: (option) => dispatch(setSearchCondition(option))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Filter)

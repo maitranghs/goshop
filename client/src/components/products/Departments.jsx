@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import Loading from '../Loading'
-import { getProductsByCondition } from '../../actions'
+import { setSearchCondition } from '../../actions'
 
 class Departments extends Component {
 
@@ -15,17 +15,16 @@ class Departments extends Component {
     this.fnSearchByDepartmentId = this.fnSearchByDepartmentId.bind(this)
   }
 
-  fnSearchByDepartmentId(e, categories, deparmentId) {
+  fnSearchByDepartmentId(categories, deparmentId) {
 
     this.setState({ isShowDropdown: true, categories })
 
-    // TODO: get products by department
-    // const { getProductsByCondition } = this.props
-    // getProductsByCondition(null, deparmentId)
+    const { setSearchCondition } = this.props
+    setSearchCondition({ department_id: deparmentId })
   }
 
   render() {
-    const { departments, getProductsByCondition } = this.props
+    const { departments, setSearchCondition } = this.props
     const { isShowDropdown, categories } = this.state
     return (
       <div>
@@ -36,7 +35,7 @@ class Departments extends Component {
           <div className="collection">
             {departments.map((dep, idx) =>
                 <a key={idx} href={'#' + dep._id}
-                  onClick={() => this.setState({ isShowDropdown: true, categories: dep.categories })}
+                  onClick={() => this.fnSearchByDepartmentId(dep.categories, dep._id)}
                   className="collection-item dropdown-trigger blue-grey-text text-darken-3">
                   {dep.name}
                   <i className="material-icons right">arrow_drop_down</i>
@@ -48,7 +47,7 @@ class Departments extends Component {
         {isShowDropdown &&
           <ul id="dropdown2">
             {categories.map((cat, idx) =>
-              <li key={idx} onClick={() => getProductsByCondition(cat._id, null)}>
+              <li key={idx} onClick={() => setSearchCondition({ category_id: cat._id })}>
                 <a href={'#' + cat._id}>{cat.name}</a>
               </li>)}
           </ul>
@@ -64,7 +63,7 @@ const mapStateToProps = (state) => ({
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  getProductsByCondition: (categoryId, departmentId) => dispatch(getProductsByCondition({ categoryId, departmentId }))
+  setSearchCondition: (option) => dispatch(setSearchCondition(option))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Departments)
