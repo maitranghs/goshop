@@ -18,3 +18,18 @@
   -webkit-transform: scaleX(-1);
   transform: scaleX(-1);
 }
+
+.origin-price {
+  font-style: italic;
+  text-decoration: line-through;
+}
+
+.discounted-price {
+  font-family: 'Playfair Display', serif;
+}
+
+.grand-total {
+  font-size: 20px;
+  font-family: 'Playfair Display', serif;
+  font-style: bold;
+}

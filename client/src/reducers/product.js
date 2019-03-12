@@ -2,11 +2,11 @@ import { START_FETCH_PRODUCT,
         FETCH_PRODUCT,
         INCREASE,
         DECREASE,
-        SET_ATTRIBUTE} from '../actions/type'
+        CHOOSE_PRODUCT_ATTRIBUTE,
+        UPDATE_PRODUCT_SKU } from '../actions/type'
 
 const initialState = {
-  quantity: 1,
-  attributes: []
+  quantity: 1
 }
 
 export const reducer = (state=initialState, action) => {
@@ -21,8 +21,10 @@ export const reducer = (state=initialState, action) => {
       return { ...state, quantity: state.quantity + 1 }
     case DECREASE:
       return { ...state, quantity: state.quantity === 1 ? 1 : state.quantity - 1 }
-    case SET_ATTRIBUTE:
-      return { ...state, attributes: [ ...state.attributes, payload.attribute ] }
+    case CHOOSE_PRODUCT_ATTRIBUTE:
+      return { ...state, ...payload.attribute }
+    case UPDATE_PRODUCT_SKU:
+      return { ...state, sku: payload.sku }
     default:
       return state
   }

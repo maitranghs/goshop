@@ -1,11 +1,7 @@
 export default class DataCache {
 
-  data = {};
-
   store = ({ key, value }) => {
-    this.data[ key ] = value;
-  };
-
-  load = ({ key }) => this.data[ key ];
-
+    window.localStorage.setItem(key, JSON.stringify(value))
+  }
+  load = ({ key }) => JSON.parse(window.localStorage.getItem(key))
 }

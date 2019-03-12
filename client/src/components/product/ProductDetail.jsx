@@ -1,21 +1,20 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import { fetchProductDetail } from '../../actions'
-import { INCREASE, DECREASE, SET_ATTRIBUTE, ADD_TO_CART, REMOVE_FROM_CART } from '../../actions/type'
+import { fetchProductDetail, addToCart } from '../../actions'
+import { INCREASE, DECREASE } from '../../actions/type'
 import Loading from '../Loading'
 import Attribute from './Attribute'
 
 class ProductDetail extends Component {
 
   componentDidMount() {
-    const { fetchProductDetail, setAttribute, match } = this.props
+    const { fetchProductDetail, match } = this.props
     fetchProductDetail(match.params._id)
-    setAttribute({})
   }
 
   render() {
-    const { product, hasDetail, attributes, increase, decrease, addToCard, removeFromCard } = this.props
+    const { product, hasDetail, attributes, increase, decrease, addToCart } = this.props
     return (
       <main>
         {!hasDetail && <Loading/>}
@@ -32,7 +31,10 @@ class ProductDetail extends Component {
               <div className="col s6">
                 <div className="row">
                   <h4>{product.name}</h4>
-                  <h5 className="blue-grey-text text-darken-3">${product.price * product.quantity}</h5>
+                  <span className="grey-text text-lighten-1">
+                    SKU: {product.size !== undefined && `${product.parent_sku}-${product.size}-${product.color}`}
+                  </span>
+                  <h5 className="blue-grey-text text-darken-3">${(product.price * product.quantity).toFixed(2)}</h5>
                 </div>
                 <div className="row">
                   {attributes.length > 0 && attributes.map((att, idx) => <Attribute attribute={att} key={idx}/>)}
@@ -51,9 +53,7 @@ class ProductDetail extends Component {
                 </div>
                 <div className="row">
                   <a href="#add_to_cart" className="waves-effect waves-light btn"
-                    onClick={() => addToCard(product)}>Add to cart</a>&nbsp;&nbsp;
-                  <a href="#remove_from_cart" className="waves-effect waves-light btn"
-                    onClick={() => removeFromCard(product)}>Remove from cart</a>
+                    onClick={() => addToCart(product)}>Add to cart</a>
                 </div>
               </div>
             </div>
@@ -77,8 +77,6 @@ const mapDispatchToProps = (dispatch) => ({
   fetchProductDetail: (id) => dispatch(fetchProductDetail(id)),
   increase: () => dispatch({ type: INCREASE }),
   decrease: () => dispatch({ type: DECREASE }),
-  setAttribute: (attribute) => dispatch({ type: SET_ATTRIBUTE, payload: { attribute } }),
-  addToCard: (product) => dispatch({ type: ADD_TO_CART, payload: { product } }),
-  removeFromCard: (product) => dispatch({ type: REMOVE_FROM_CART, payload: { product } })
+  addToCart: (product) => dispatch(addToCart(product))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail)

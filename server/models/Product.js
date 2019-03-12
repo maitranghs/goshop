@@ -2,6 +2,10 @@ const mongoose = require('mongoose')
 const { Schema } = mongoose
 
 const productSchema = new Schema({
+  parent_sku: {
+    type: String,
+    index: true
+  },
   name: {
     type: String,
     index: true

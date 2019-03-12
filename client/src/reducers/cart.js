@@ -1,17 +1,35 @@
-import { ADD_TO_CART,
-        REMOVE_FROM_CART } from '../actions/type'
+import { INITIALIZE_CART,
+        ADD_TO_CART,
+        REMOVE_FROM_CART,
+        CALCULATE_TOTAL_CART } from '../actions/type'
 
-export const reducer = (state=[], action) => {
+const initialState = {
+  products: [],
+  summary: {}
+}
+export const reducer = (state=initialState, action) => {
   const { type, payload } = action
   switch(type) {
+    case INITIALIZE_CART:
+      return payload.cart
     case ADD_TO_CART: {
-      const quantity = state.reduce(
-        (quantity, product) => (product._id === payload.product._id) ? quantity + product.quantity : 0,
-        payload.product.quantity)
-      return [ ...state.filter(product => product._id !== payload.product._id), { ...payload.product, quantity } ]
+      const quantity = state.products.reduce(
+        (quantity, product) => (product.sku === payload.product.sku) ? quantity + product.quantity : quantity,
+        payload.product.quantity
+      )
+      return { ...state,
+              products: [
+                ...state.products.filter(product => product.sku !== payload.product.sku),
+                { ...payload.product, quantity }
+              ]
+             }
     }
     case REMOVE_FROM_CART:
-      return state.filter(product => product._id !== payload.product._id)
+      return { ...state,
+                products: state.products.filter(product => product.sku !== payload.product.sku)
+              }
+    case CALCULATE_TOTAL_CART:
+      return { ...state, summary: payload.summary }
     default:
       return state
   }

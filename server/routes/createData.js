@@ -85,15 +85,17 @@ module.exports = app => {
                 break
               case 'Product':
                 if (isNaN(parseFloat(arrayRow[3])) || arrayRow.length !== 9) return
+                const name = arrayRow[1].trim().replace(/"/gi, '')
                 data = {
-                  name: arrayRow[1].trim().replace(/"/gi, ''),
+                  name: name,
                   description: arrayRow[2].trim().replace(/"/gi, ''),
                   price: arrayRow[3],
                   discounted_price: arrayRow[4],
                   image: arrayRow[5].trim().replace(/"/gi, ''),
                   image_2: arrayRow[6].trim().replace(/"/gi, ''),
                   thumbnail: arrayRow[7].trim().replace(/"/gi, ''),
-                  display: arrayRow[8]
+                  display: arrayRow[8],
+                  parent_sku: name.substr(0,2).toUpperCase() + Math.round((Math.random() * 10000) % 101)
                 }
                 break
               case 'Shipping':
