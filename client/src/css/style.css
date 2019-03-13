@@ -56,7 +56,7 @@
   text-align: center;
 }
 
-.active {
+.attribute-active {
   border: 1.5px gray solid;
 }
 
@@ -71,4 +71,9 @@
 }
 .dep-active {
   background-color: #e0e0e0;
+}
+img {
+  opacity: 1;
+  mix-blend-mode: multiply;
+  vertical-align: top;
 }

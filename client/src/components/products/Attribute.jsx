@@ -34,7 +34,7 @@ class Attribute extends Component {
                 className={classNames({
                   'btn grey-text text-lighten-1 white button-size': attribute.name === 'Size',
                   'btn button-color': attribute.name === 'Color',
-                  'active': attributes[attribute.name] && (attributes[attribute.name]._id === attrValue._id)
+                  'attribute-active': attributes[attribute.name] && (attributes[attribute.name]._id === attrValue._id)
                 })}
                 style={applyStyle(attribute.name, attrValue.value)}>
                 {(attribute.name === 'Size') ? attrValue.value : ''}

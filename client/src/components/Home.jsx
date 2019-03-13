@@ -92,7 +92,7 @@ const Home = () => (
                 <a href="#!">
                   <div className="card hoverable small center-align">
                     <div className="card-image">
-                      <img src="https://materializecss.com/images/office.jpg" alt="product"/>
+                      <img src="https://demo.storefrontcloud.io/img/600/744/resize/w/s/ws11-green_main.jpg" alt="product"/>
                     </div>
                     <div className="card-content">
                       <span className="blue-grey-text text-darken-3">Minerva LumaTech™ V-Neck Tee</span>

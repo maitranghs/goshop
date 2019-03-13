@@ -15,7 +15,7 @@ class Header extends Component {
                 <li style={{ position: 'relative' }}>
                   <Link className="blue-grey-text text-darken-3" to='/cart'>
                     <i className="material-icons right">shopping_cart</i>
-                    <span className="cart-number">{this.props.cartNumber}</span>
+                    {this.props.cartNumber > 0 && <span className="cart-number">{this.props.cartNumber}</span>}
                   </Link>
                 </li>
                 <li><a className="blue-grey-text text-darken-3" href="#!"><i className="material-icons right">account_box</i></a></li>

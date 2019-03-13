@@ -10,6 +10,7 @@ import Home from './Home'
 import Products from './products/Products'
 import ProductDetail from './product/ProductDetail'
 import Cart from './cart/Cart'
+import Checkout from './checkout/Checkout'
 
 import "../css/style.css"
 
@@ -28,7 +29,7 @@ class App extends Component {
             <Route path="/products" component={Products}/>
             <Route path="/product/:_id" component={ProductDetail}/>
             <Route path="/cart" component={Cart}/>
-            <Route path="/checkout" component={Header}/>
+            <Route path="/checkout" component={Checkout}/>
             <Route path="/template" component={Home}/>
           </Switch>
           <Footer/>

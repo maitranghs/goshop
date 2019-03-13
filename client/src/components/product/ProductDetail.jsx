@@ -24,7 +24,7 @@ class ProductDetail extends Component {
               <div className="col s6">
                 <div className="card">
                   <div className="card-image">
-                    <img src="https://materializecss.com/images/office.jpg" alt="product"/>
+                    <img src="https://demo.storefrontcloud.io/img/600/744/resize/w/s/ws11-green_main.jpg" alt="product"/>
                   </div>
                 </div>
               </div>
