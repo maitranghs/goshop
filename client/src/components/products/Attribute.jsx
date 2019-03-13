@@ -1,22 +1,25 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import { setSearchCondition } from '../../actions'
+import { setSearchAttributeCondition } from '../../actions'
+import classNames from "classnames"
 
 class Attribute extends Component {
+  constructor(props) {
+    super(props)
+
+    this.chooseProductAttribute = this.chooseProductAttribute.bind(this)
+  }
+  chooseProductAttribute(type, value) {
+    let attribute = {}
+    attribute[type] = value
+    this.props.setSearchAttributeCondition(attribute)
+  }
   render() {
-    const { attribute, setSearchCondition } = this.props,
-    className = (attribute.name === 'Size') ? 'btn grey-text text-lighten-1 white button-size' : 'btn button-color',
+    const { attribute, attributes } = this.props,
     applyStyle = (type, value) => {
       switch(type) {
         case 'Color': return { backgroundColor: value }
         default: return { backgroundColor: 'white' }
-      }
-    },
-    applyValue = (type, value) => {
-      switch(type) {
-        case 'Color': return ''
-        case 'Size': return value
-        default: return ''
       }
     }
 
@@ -26,11 +29,15 @@ class Attribute extends Component {
         <ul className="row">
           {attribute.values.map((attrValue, idx) => (
             <li key={idx} className="col s3 m3 l3"
-              onClick={() => setSearchCondition({ attribute_value_id: attrValue._id })}>
+              onClick={() => this.chooseProductAttribute(attribute.name, attrValue)}>
               <a href={'#' + attrValue._id}
-                className={className}
+                className={classNames({
+                  'btn grey-text text-lighten-1 white button-size': attribute.name === 'Size',
+                  'btn button-color': attribute.name === 'Color',
+                  'active': attributes[attribute.name] && (attributes[attribute.name]._id === attrValue._id)
+                })}
                 style={applyStyle(attribute.name, attrValue.value)}>
-                {applyValue(attribute.name, attrValue.value)}
+                {(attribute.name === 'Size') ? attrValue.value : ''}
               </a>
             </li>
           ))}
@@ -41,6 +48,6 @@ class Attribute extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => ({
-  setSearchCondition: (option) => dispatch(setSearchCondition(option))
+  setSearchAttributeCondition: (option) => dispatch(setSearchAttributeCondition(option))
 })
 export default connect(null, mapDispatchToProps)(Attribute)

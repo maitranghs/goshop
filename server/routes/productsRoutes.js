@@ -64,7 +64,7 @@ module.exports = (app) => {
   /* const options = {
     department_id: '',
     category_id: '',
-    attribute_value_id: '',
+    attributes: { Color: {}, Size: {}},
     price: {
       from: 0,
       to: 15.5
@@ -74,10 +74,11 @@ module.exports = (app) => {
   app.post('/api/products/s', async (req, res) => {
     const { department_id,
       category_id,
-      attribute_value_id,
+      attributes,
       price,
       text } = req.body
 
+    console.log(attributes)
     let products, conditions = []
     if (text) {
       conditions.push({
@@ -149,7 +150,8 @@ module.exports = (app) => {
       })
     }
 
-    if (attribute_value_id) {
+    const attributeArray = Object.values(attributes)
+    if (attributeArray.length > 0) {
       conditions.push({
         $lookup: {
           from: 'productattributes',
@@ -158,8 +160,11 @@ module.exports = (app) => {
           as: 'pa'
         }
       })
+      const mapAttributes = attributeArray.map(attribute => 
+                  ({ 'pa.attribute_value_id': { $eq: mongoose.Types.ObjectId(attribute._id) } }))
+
       conditions.push({
-        $match: { 'pa.attribute_value_id': { $eq: mongoose.Types.ObjectId(attribute_value_id) } }
+        $match: { $and: mapAttributes }
       })
       conditions.push({
         $project: { pa: 0 }

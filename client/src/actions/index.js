@@ -39,6 +39,12 @@ export const setSearchCondition = (option) =>
     dispatch(searchProducts())
   }
 
+export const setSearchAttributeCondition = (attribute) =>
+  (dispatch) => {
+    dispatch(productsAction.setSearchAttributeCondition(attribute))
+    dispatch(searchProducts())
+  }
+
 export const fetchProductDetail = (id) =>
   async (dispatch, getState, { axios }) => {
     dispatch(productDetailAction.startFetchProductDetail())

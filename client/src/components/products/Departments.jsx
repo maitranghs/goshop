@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import classNames from "classnames"
 
 import Loading from '../Loading'
 import { setSearchCondition } from '../../actions'
@@ -9,47 +10,45 @@ class Departments extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      isShowDropdown: false,
-      categories: []
+      deparmentId: ''
     }
     this.fnSearchByDepartmentId = this.fnSearchByDepartmentId.bind(this)
   }
 
-  fnSearchByDepartmentId(categories, deparmentId) {
+  fnSearchByDepartmentId(deparmentId) {
 
-    this.setState({ isShowDropdown: true, categories })
+    this.setState({ deparmentId })
 
     const { setSearchCondition } = this.props
     setSearchCondition({ department_id: deparmentId })
   }
 
   render() {
-    const { departments, setSearchCondition } = this.props
-    const { isShowDropdown, categories } = this.state
+    const { departments, setSearchCondition, chosenDeparmentId, chosenCategoryId } = this.props
     return (
       <div>
         <h5 className="left-align blue-grey-text text-darken-3">Departments</h5>
         <div className="divider"></div>
         {departments.length === 0 && <Loading/>}
         {departments.length > 0 && 
-          <div className="collection">
+          <ul>
             {departments.map((dep, idx) =>
-                <a key={idx} href={'#' + dep._id}
-                  onClick={() => this.fnSearchByDepartmentId(dep.categories, dep._id)}
-                  className="collection-item dropdown-trigger blue-grey-text text-darken-3">
+              <li key={idx}
+                  className={classNames("dep-li", {"dep-active": chosenDeparmentId === dep._id})}
+                  onClick={() => this.fnSearchByDepartmentId(dep._id)}>
+                <a href={'#' + dep._id}
+                  className="blue-grey-text text-darken-3">
                   {dep.name}
-                  <i className="material-icons right">arrow_drop_down</i>
                 </a>
-              )
-            }
-          </div>
-        }
-        {isShowDropdown &&
-          <ul id="dropdown2">
-            {categories.map((cat, idx) =>
-              <li key={idx} onClick={() => setSearchCondition({ category_id: cat._id })}>
-                <a href={'#' + cat._id}>{cat.name}</a>
-              </li>)}
+                {this.state.deparmentId === dep._id && <ul>
+                  {dep.categories.map((cat, idx) =>
+                    <li className={classNames("dep-li", {"dep-active": chosenCategoryId === cat._id})}
+                        key={idx} onClick={() => setSearchCondition({ category_id: cat._id })}>
+                      <a href={'#' + cat._id}>{cat.name}</a>
+                    </li>)}
+                </ul>}
+              </li>
+            )}
           </ul>
         }
       </div>
@@ -59,7 +58,9 @@ class Departments extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  departments: state.departments
+  departments: state.departments,
+  chosenDeparmentId: state.products.options.department_id,
+  chosenCategoryId: state.products.options.category_id
 })
 
 const mapDispatchToProps = (dispatch) => ({

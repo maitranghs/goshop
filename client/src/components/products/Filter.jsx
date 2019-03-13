@@ -7,7 +7,7 @@ import Attribute from './Attribute'
 
 class Filter extends Component {
   render() {
-    const { attributes, setSearchCondition } = this.props,
+    const { attributes, conditionAttributes, setSearchCondition } = this.props,
       priceList = [
         {
           price: { from: 0, to: 15 },
@@ -27,7 +27,7 @@ class Filter extends Component {
         <h5 className="left-align blue-grey-text text-darken-3">Filter</h5>
         <div className="divider"></div>
         {attributes.length === 0 && <Loading/>}
-        {attributes.length > 0 && attributes.map((att, idx) => <Attribute attribute={att} key={idx}/>)}
+        {attributes.length > 0 && attributes.map((att, idx) => <Attribute attributes={conditionAttributes} attribute={att} key={idx}/>)}
 
         <div className="section">
           <h6>Price</h6>
@@ -52,7 +52,8 @@ class Filter extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  attributes: state.attributes
+  attributes: state.attributes,
+  conditionAttributes: state.products.options.attributes
 })
 const mapDispatchToProps = (dispatch) => ({
   setSearchCondition: (option) => dispatch(setSearchCondition(option))

@@ -33,3 +33,42 @@
   font-family: 'Playfair Display', serif;
   font-style: bold;
 }
+
+.cart-number {
+  display: flex;
+  top: 10px;
+  left: 55%;
+  min-width: 16px;
+  min-height: 16px;
+  border-radius: 10px;
+  position: absolute;
+  background-color: #bdbdbd;
+  font-weight: 700;
+  line-height: 16px;
+  padding-left: 2px;
+  padding-right: 2px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  font-size: 12px;
+  color: white;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.active {
+  border: 1.5px gray solid;
+}
+
+.dep-li {
+  line-height: 30px;
+  padding: 10px;
+}
+.dep-li:hover {
+  line-height: 30px;
+  padding: 10px;
+  background-color: #e0e0e0;
+}
+.dep-active {
+  background-color: #e0e0e0;
+}

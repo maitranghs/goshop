@@ -1,6 +1,7 @@
 import { START_SEARCH_PRODUCTS,
         SET_PRODUCTS,
         SET_SEARCH_PRODUCTS_CONDITIONS,
+        SET_SEARCH_PRODUCTS_ATTRIBUTE_CONDITIONS,
         RESET_SEARCH_PRODUCTS_CONDITIONS,
         START_FETCH_PRODUCT,
         FETCH_PRODUCT } from '../actions/type'
@@ -21,6 +22,13 @@ export const setSearchCondition = (option) => ({
   type: SET_SEARCH_PRODUCTS_CONDITIONS,
   payload: {
     option
+  }
+})
+
+export const setSearchAttributeCondition = (attribute) => ({
+  type: SET_SEARCH_PRODUCTS_ATTRIBUTE_CONDITIONS,
+  payload: {
+    attribute
   }
 })
 
