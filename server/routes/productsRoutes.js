@@ -4,6 +4,7 @@ const Product = mongoose.model('Product')
 const Category = mongoose.model('Category')
 const ProductCategory = mongoose.model('ProductCategory')
 const AttributeValue = mongoose.model('AttributeValue')
+const ShippingRegion = mongoose.model('ShippingRegion')
 
 module.exports = (app) => {
   app.get('/api/products', async (req, res) => {
@@ -59,6 +60,11 @@ module.exports = (app) => {
 
     res.send(Object.values(attributes))
 
+  })
+  app.get('/api/shippingregions', async (req, res) => {
+    const regions = await ShippingRegion.find({})
+
+    res.send(regions)
   })
 
   /* const options = {

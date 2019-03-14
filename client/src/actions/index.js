@@ -3,6 +3,7 @@ import * as productDetailAction from './product'
 import * as departmentAction from './departments'
 import * as attributeAction from './attributes'
 import * as cartAction from './cart'
+import * as shippingAction from './shipping'
 
 export const SHOPPING_CART = 'SHOPPING_CART'
 
@@ -23,6 +24,9 @@ export const initApp = () =>
 
     const attributes = await axios.get('/api/attributes')
     dispatch(attributeAction.setAttributes(attributes.data))
+
+    const shippingRegions = await axios.get('/api/shippingregions')
+    dispatch(shippingAction.fetchShippingRegions(shippingRegions.data))
 
     let cart = dataCache.load({ key: SHOPPING_CART })
     if (!cart) {

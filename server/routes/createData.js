@@ -229,7 +229,7 @@ module.exports = app => {
         })
       }
 
-      const shrIds = await fnShipRegion(['Please Select', 'US / Canada', 'Europe', 'Rest of World'])
+      const shrIds = await fnShipRegion(['US / Canada', 'Europe', 'Rest of World'])
       console.log(shrIds.length)
       shippingIds.map(async (id, i) => {
         let shrid
