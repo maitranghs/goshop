@@ -22,6 +22,8 @@ require('./models/Shipping')
 require('./models/Tax')
 //review
 
+require('./services/passport')
+
 const app = express()
 app.use(bodyParser.json())
 app.use(
@@ -35,8 +37,8 @@ app.use(passport.session())
 
 require('./routes/productsRoutes')(app)
 require('./routes/ordersRoutes')(app)
-// require('./routes/cartRoutes')(app)
-// require('./routes/cutomerRoutes')(app)
+require('./routes/authRoutes')(app)
+require('./routes/cutomerRoutes')(app)
 
 require('./routes/createData')(app)
 

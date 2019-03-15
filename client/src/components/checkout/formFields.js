@@ -31,3 +31,8 @@ export const shipping = [
 export const review = [
   { label: 'I agree to Terms and Conditions', name: 'accept_term', type: 'checkbox', validate: [ required ], component: CheckboxField }
 ]
+
+export const login = [
+  { label: 'Email*', name: 'email', type: 'email', validate: [ required, email ], component: TextField },
+  { label: 'Password*', name: 'password', type: 'password', validate: [ required, minLength(6) ], component: TextField }
+]

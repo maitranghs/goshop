@@ -122,3 +122,10 @@ export const placeOrder = () =>
     })
     console.log(data)
   }
+
+export const doLogin = () =>
+  async (dispatch, getState, { axios }) => {
+    const loginForm = getState().form.loginForm
+    const customer = await axios.post('/api/auth/login', loginForm.values)
+    console.log(customer)
+  }

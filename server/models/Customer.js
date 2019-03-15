@@ -21,4 +21,10 @@ const CustomerSchema = Schema({
   mob_phone: String
 })
 
+const bcrypt = require('bcrypt')
+CustomerSchema.methods.generateHash = (password) => bcrypt.hashSync(password, 10)
+CustomerSchema.methods.validPassword = function (password) {
+  return bcrypt.compareSync(password, this.password)
+}
+
 mongoose.model('Customer', CustomerSchema)

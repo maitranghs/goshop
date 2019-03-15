@@ -11,6 +11,7 @@ import Products from './products/Products'
 import ProductDetail from './product/ProductDetail'
 import Cart from './cart/Cart'
 import Checkout from './checkout/Checkout'
+import Login from './customer/Login'
 
 import "../css/style.css"
 
@@ -31,6 +32,8 @@ class App extends Component {
             <Route path="/cart" component={Cart}/>
             <Route path="/checkout" component={Checkout}/>
             <Route path="/template" component={Home}/>
+            <Route path="/login" component={Login}/>
+            <Route path="/register" component={Home}/>
           </Switch>
           <Footer/>
         </div>
