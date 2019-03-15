@@ -1,0 +1,24 @@
+<html>
+  <head></head>
+  <body>
+    <div>
+      <p>Dear ${customer_name}, thank you for using our services.</p>
+      <p>Your order details as below.</p>
+    </div>
+    <div>
+      <h5>Order Details</h5>
+      ${orderDetails}
+    </div>
+    <div>
+      <h5>Summary</h5>
+      <p>Order ID: ${order_id}</p>
+      <p>${shipping_type}: ${shipping_cost}</p>
+      <p>${tax_type}: ${tax_percentage}</p>
+      <p>Total: ${total_amount}</p>
+      <p>Created on: ${created_on}</p>
+      <p>Shipped on: ${shipped_on}</p>
+      <p>Status: ${status}</p>
+      <p>Comments: ${comments}</p>
+    </div>
+  </body>
+</html>

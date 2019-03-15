@@ -8,6 +8,8 @@ import Payment from './Payment'
 import Review from './Review'
 import OrderSummary from './OrderSummary'
 
+import { placeOrder } from '../../actions'
+
 class Checkout extends Component {
   constructor(props) {
     super(props)
@@ -34,7 +36,7 @@ class Checkout extends Component {
               <a href="#place_the_order"
                 className={classNames("btn right",
                   { 'disabled': this.state.paymentErrors || this.props.customerDetailsFormErrors || this.props.reviewFormErrors })}
-                onClick={() => console.log()}>
+                onClick={() => this.props.placeOrder()}>
                 Place The Order
               </a>
             </div>
@@ -54,4 +56,7 @@ const mapStateToProps = (state) => ({
   customerDetailsFormErrors: state.form.customerDetailsForm && state.form.customerDetailsForm.syncErrors,
   reviewFormErrors: state.form.reviewForm && state.form.reviewForm.syncErrors
 })
-export default connect(mapStateToProps)(Checkout)
+const mapDispatchToProps = (dispatch) => ({
+  placeOrder: () => dispatch(placeOrder())
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Checkout)

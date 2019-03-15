@@ -14,10 +14,10 @@ require('./models/Attribute')
 require('./models/AttributeValue')
 require('./models/ProductAttribute')
 //shopping_cart
-//orders
-//order_detail
+require('./models/Order')
+require('./models/OrderDetail')
 require('./models/ShippingRegion')
-//customer
+require('./models/Customer')
 require('./models/Shipping')
 require('./models/Tax')
 //review
@@ -34,7 +34,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 require('./routes/productsRoutes')(app)
-// require('./routes/orderRoutes')(app)
+require('./routes/ordersRoutes')(app)
 // require('./routes/cartRoutes')(app)
 // require('./routes/cutomerRoutes')(app)
 

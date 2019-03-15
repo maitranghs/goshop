@@ -7,12 +7,7 @@ const AttributeValue = mongoose.model('AttributeValue')
 const ShippingRegion = mongoose.model('ShippingRegion')
 
 module.exports = (app) => {
-  app.get('/api/products', async (req, res) => {
-    const products = await Product.find({})
 
-    // TODO check paging in mongdoDB
-    res.send(products)
-  })
   app.get('/api/departments', async (req, res) => {
     const categories = await Category.find({}).populate('department_id').exec()
 
@@ -38,6 +33,7 @@ module.exports = (app) => {
 
     res.send(Object.values(departments))
   })
+
   app.get('/api/attributes', async (req, res) => {
     const attributeValues = await AttributeValue.find({}).populate('attribute_id').exec()
     let attributes = {}
@@ -61,22 +57,16 @@ module.exports = (app) => {
     res.send(Object.values(attributes))
 
   })
+
   app.get('/api/shippingregions', async (req, res) => {
     const regions = await ShippingRegion.find({})
 
     res.send(regions)
   })
 
-  /* const options = {
-    department_id: '',
-    category_id: '',
-    attributes: { Color: {}, Size: {}},
-    price: {
-      from: 0,
-      to: 15.5
-    },
-    text: ''
-  } */
+  /* options = { department_id: '', category_id: '', attributes: { Color: {}, Size: {}}, price: { from: 0, to: 15.5 }, text: '' } */
+
+  // Product search
   app.post('/api/products/s', async (req, res) => {
     const { department_id,
       category_id,

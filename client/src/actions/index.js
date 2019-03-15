@@ -107,3 +107,18 @@ export const removeFromCart = (product) =>
     dispatch(cartAction.removeFromCart(product))
     dispatch(updateCartSummary())
   }
+
+export const placeOrder = () =>
+  async (dispatch, getState, { axios }) => {
+
+    const state = getState()
+    // check validation again before post
+    if (!state.form.reviewForm.values.accept_term) return
+
+    const { data } = await axios.post('/api/charge', {
+      cart: state.cart,
+      customer: state.form.customerDetailsForm.values,
+      token: state.stripe.token
+    })
+    console.log(data)
+  }

@@ -8,5 +8,6 @@ module.exports = {
   cookieKey: '123123123',
   redisUrl: 'redis://127.0.0.1:6379',
   accessKeyId: 'ADFDFDFDFDGHFDGDGDFGDFGF',
-  secretAccessKey: 'GFSGFDSGFDGFDGFDGF'
+  secretAccessKey: 'GFSGFDSGFDGFDGFDGF',
+  stripeApiKey: 'pk_test_TYooMQauvdEDq54NiTphI7jx'
 };
