@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
+import { doLogout } from '../actions'
+
 class Header extends Component {
   render() {
+    const { cartNumber, isLogged, logout } = this.props
     return (
       <header>
         <nav className="top-nav grey lighten-5">
@@ -15,10 +18,29 @@ class Header extends Component {
                 <li style={{ position: 'relative' }}>
                   <Link className="blue-grey-text text-darken-3" to='/cart'>
                     <i className="material-icons right">shopping_cart</i>
-                    {this.props.cartNumber > 0 && <span className="cart-number">{this.props.cartNumber}</span>}
+                    {cartNumber > 0 && <span className="cart-number">{cartNumber}</span>}
                   </Link>
                 </li>
-                <li><a className="blue-grey-text text-darken-3" href="#!"><i className="material-icons right">account_box</i></a></li>
+                
+                {!isLogged &&
+                  <li>
+                    <Link className="blue-grey-text text-darken-3" to='/login'>Login</Link>
+                  </li>
+                }
+                {!isLogged &&
+                  <li>
+                    <Link className="blue-grey-text text-darken-3" to='/register'>Register</Link>
+                  </li>
+                }
+                {isLogged &&
+                  <li>
+                    <a className="blue-grey-text text-darken-3" href='#logout'
+                      onClick={(e) => {e.preventDefault(); logout()}}>
+                      Logout
+                      {/*<i className="material-icons right">account_box</i>*/}
+                    </a>
+                  </li>}
+                
               </ul>
             </div>
           </div>
@@ -29,6 +51,11 @@ class Header extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  cartNumber: state.cart.products.reduce((total, product) => total + product.quantity, 0)
+  cartNumber: state.cart.products.reduce((total, product) => total + product.quantity, 0),
+  current: state.customer.current,
+  isLogged: Object.values(state.customer.current).length > 0
 })
-export default connect(mapStateToProps)(Header)
+const mapDispatchToProps = (dispatch) => ({
+  logout: () => dispatch(doLogout())
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

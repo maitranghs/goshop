@@ -39,21 +39,24 @@ passport.use('local-login',
 passport.use('local-signup',
   new LocalStrategy({
     usernameField: 'email',
-    passwordField: 'password'
+    passwordField: 'password',
+    passReqToCallback: true
   },
-    async (email, password, done) => {
-      console.log('in local-signup', email, password)
+    async (req, email, password, done) => {
       const existingCustomer = await Customer.findOne({ email })
 
       if(existingCustomer) {
         return done({ error: 'The email is existed.' }, null)
       }
 
-      const newCustomer = new Customer()
+      const { first_name, last_name } = req.body
+      let newCustomer = new Customer()
+      newCustomer.first_name = first_name
+      newCustomer.last_name = last_name
       newCustomer.email = email
       newCustomer.password = newCustomer.generateHash(password)
-      await newCustomer.save()
-      
+      newCustomer.save()
+
       done(null, newCustomer)
     }
   )

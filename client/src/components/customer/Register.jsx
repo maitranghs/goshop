@@ -3,23 +3,25 @@ import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
 import classNames from 'classnames'
 
-import { login } from '../checkout/formFields'
-import { doLogin } from '../../actions'
+import { customerDetails } from '../checkout/formFields'
+import { register } from '../../actions'
 
-class Login extends Component {
+import { SUCCESS } from '../../actions/apiStatus'
+
+class Register extends Component {
   render() {
-    const { submitLogin, login: { error }, current } = this.props
+    const { submitRegister, register: { status, error } } = this.props
     return (
       <main>
-        {current ? this.props.history.push('/products'): ''}
-        <div className="container">
-          <h5 className="center-align">Login</h5>
+        {status === SUCCESS ? this.props.history.push('/login'): ''}
+        {status !== SUCCESS && <div className="container">
+          <h5 className="center-align">Register</h5>
           <div className="container">
             <div className="red-text" style={{ marginBottom: '20px' }}>
               {error}
             </div>
             <div className="col s6 m6 l6 ">
-              {login.map(({ label, name, type, validate, component }, idx) => 
+              {customerDetails.map(({ label, name, type, validate, component }, idx) => 
                 <Field
                   key={idx}
                   component={component}
@@ -30,32 +32,31 @@ class Login extends Component {
               )}
             </div>
             <div className="col s5 center-align">
-              <a href='#login'
+              <a href='#register'
                 className={classNames('btn', { 'disabled': !this.props.canSubmit })}
-                onClick={(e) => {e.preventDefault(); submitLogin();}}>
+                onClick={(e) => {e.preventDefault(); submitRegister();}}>
                 Submit
               </a>
             </div>
             
           </div>
-        </div>
+        </div>}
       </main>
     )
   }
 }
 
-Login = reduxForm({
-  form: 'loginForm',
+Register = reduxForm({
+  form: 'registerForm',
   destroyOnUnmount: false
-})(Login)
+})(Register)
 
 const mapStateToProps = (state) => ({
-  login: state.customer.login,
-  canSubmit: state.form.loginForm && !state.form.loginForm.syncErrors,
-  current: Object.values(state.customer.current).length > 0
+  register: state.customer.register,
+  canSubmit: state.form.registerForm && !state.form.registerForm.syncErrors
 })
 const mapDispatchToProps = (dispatch) => ({
-  submitLogin: () => dispatch(doLogin())
+  submitRegister: () => dispatch(register())
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login)
+export default connect(mapStateToProps, mapDispatchToProps)(Register)

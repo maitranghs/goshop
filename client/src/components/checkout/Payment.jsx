@@ -9,7 +9,8 @@ class Payment extends Component {
     super(props)
     this.state = {
       error: '',
-      cardHolderName: ''
+      cardHolderName: '',
+      touched: false
     }
     this.handleChangedCardElement = this.handleChangedCardElement.bind(this)
   }
@@ -35,15 +36,16 @@ class Payment extends Component {
 
           <div className="input-field">
             <label htmlFor='stripe_card_name'>
-              Card Holder's Name
+              Card Holder's Name*
             </label>
             <input name='stripe_card_name'
                 type='text'
                 id='stripe_card_name'
                 value={this.state.cardHolderName}
-                onChange={(e) => this.setState({ cardHolderName: e.target.value })}/>
+                onChange={(e) => this.setState({ cardHolderName: e.target.value })}
+                onBlur={(e) => {e.preventDefault(); this.setState({ touched: true })}}/>
             <div className="red-text" style={{ marginBottom: '20px' }}>
-              {this.state.cardHolderName === '' && 'Required'}
+              {this.state.touched && this.state.cardHolderName === '' && 'Required'}
             </div>
           </div>
 

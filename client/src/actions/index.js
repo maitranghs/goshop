@@ -4,6 +4,9 @@ import * as departmentAction from './departments'
 import * as attributeAction from './attributes'
 import * as cartAction from './cart'
 import * as shippingAction from './shipping'
+import * as customerAction from './customer'
+
+import { SUCCESS, FAIL } from './apiStatus'
 
 export const SHOPPING_CART = 'SHOPPING_CART'
 
@@ -27,6 +30,11 @@ export const initApp = () =>
 
     const shippingRegions = await axios.get('/api/shippingregions')
     dispatch(shippingAction.fetchShippingRegions(shippingRegions.data))
+
+    const { data: { data } } = await axios.get('/api/auth/current')
+    if (data) {
+      dispatch(customerAction.fetchCurrent(data))
+    }
 
     let cart = dataCache.load({ key: SHOPPING_CART })
     if (!cart) {
@@ -110,22 +118,42 @@ export const removeFromCart = (product) =>
 
 export const placeOrder = () =>
   async (dispatch, getState, { axios }) => {
-
-    const state = getState()
-    // check validation again before post
-    if (!state.form.reviewForm.values.accept_term) return
-
-    const { data } = await axios.post('/api/charge', {
-      cart: state.cart,
-      customer: state.form.customerDetailsForm.values,
-      token: state.stripe.token
+    const { cart, form, stripe } = getState()
+    await axios.post('/api/charge', {
+      cart: cart,
+      customer: form.customerDetailsForm.values,
+      token: stripe.token
     })
-    console.log(data)
   }
 
 export const doLogin = () =>
   async (dispatch, getState, { axios }) => {
     const loginForm = getState().form.loginForm
-    const customer = await axios.post('/api/auth/login', loginForm.values)
-    console.log(customer)
+    const { data: { status, error } } = await axios.post('/api/auth/login', loginForm.values)
+    if (status === SUCCESS) {
+      dispatch(customerAction.loginSuccess(status))
+      const { data: { data } } = await axios.get('/api/auth/current')
+      dispatch(customerAction.fetchCurrent(data))
+    }
+    if (status === FAIL) {
+      dispatch(customerAction.loginFail(status, error))
+    }
+  }
+
+export const doLogout = () =>
+  async (dispatch, getState, { axios }) => {
+    await axios.get('/api/auth/logout')
+    dispatch(customerAction.logout())
+  }
+
+export const register = () =>
+  async (dispatch, getState, { axios }) => {
+    const registerForm = getState().form.registerForm
+    const { data: { status, error } } = await axios.post('/api/auth/register', registerForm.values)
+    if (status === SUCCESS) {
+      dispatch(customerAction.registerSuccess(status))
+    }
+    if (status === FAIL) {
+      dispatch(customerAction.registerFail(status, error))
+    }
   }
