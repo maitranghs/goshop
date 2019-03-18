@@ -30,7 +30,8 @@ class Attribute extends Component {
           {attribute.values.map((attrValue, idx) => (
             <li key={idx} className="col s3 m3 l3"
               onClick={() => this.chooseProductAttribute(attribute.name, attrValue)}>
-              <a href={'#' + attrValue._id} onClick={(e) => e.preventDefault()}
+              <a href={'#' + attrValue._id}
+                onClick={(e) => e.preventDefault()}
                 className={classNames({
                   'btn grey-text text-lighten-1 white button-size': attribute.name === 'Size',
                   'btn button-color': attribute.name === 'Color',

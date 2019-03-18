@@ -17,7 +17,7 @@ export const searchProducts = () =>
     const { options } = getState().products
     const { data: { metadata, data } } = await axios.post('/api/products/s', options)
 
-    dispatch(productsAction.setProducts(data, metadata[0].total))
+    dispatch(productsAction.setProducts(data, metadata[0] ? metadata[0].total : 0))
   }
 
 export const initApp = () =>

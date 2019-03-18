@@ -6,7 +6,8 @@ const attributeValueSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Attribute'
   },
-  value: String
+  value: String,
+  order: Number
 })
 
 mongoose.model('AttributeValue', attributeValueSchema)

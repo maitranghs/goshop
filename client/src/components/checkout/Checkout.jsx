@@ -34,9 +34,9 @@ class Checkout extends Component {
               <Review/>
               
               <a href="#place_the_order"
-                className={classNames("btn right",
+                className={classNames("btn right pink lighten-1",
                   { 'disabled': this.state.paymentErrors || this.props.customerDetailsFormErrors || this.props.reviewFormErrors })}
-                onClick={() => this.props.placeOrder()}>
+                onClick={(e) => {e.preventDefault();this.props.placeOrder()}}>
                 Place The Order
               </a>
             </div>

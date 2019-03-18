@@ -63,14 +63,32 @@
 .dep-li {
   line-height: 30px;
   padding: 10px;
+  border: none;
+  color: #37474f;
 }
 .dep-li:hover {
   line-height: 30px;
   padding: 10px;
-  background-color: #e0e0e0;
+  background-color: #e0e0e04d;
+  color: #37474f;
+}
+.cat-li {
+  line-height: 30px;
+  padding: 10px 10px 10px 30px;
+  border: none;
+  color: #37474f;
+}
+.cat-li:hover {
+  line-height: 30px;
+  padding: 10px 10px 10px 30px;
+  background-color: #e0e0e04d;
+  color: #37474f;
 }
 .dep-active {
-  background-color: #e0e0e0;
+  background-color: #e0e0e04d;
+}
+.cat-active {
+  background-color: #e0e0e0d3;
 }
 img {
   opacity: 1;

@@ -6,7 +6,7 @@ import { review } from './formFields'
 class Review extends Component {
   render() {
     return (
-      <div className="col s11 right">
+      <div className="col s12">
         {review.map(({ label, name, type, validate, component }, idx) =>
           <Field
             key={idx}

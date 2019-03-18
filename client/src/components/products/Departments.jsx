@@ -9,18 +9,12 @@ class Departments extends Component {
 
   constructor(props) {
     super(props)
-    this.state = {
-      deparmentId: ''
-    }
     this.fnSearchByDepartmentId = this.fnSearchByDepartmentId.bind(this)
   }
 
   fnSearchByDepartmentId(deparmentId) {
-
-    this.setState({ deparmentId })
-
     const { setSearchCondition } = this.props
-    setSearchCondition({ department_id: deparmentId })
+    setSearchCondition({ department_id: deparmentId, category_id: undefined })
   }
 
   render() {
@@ -33,20 +27,29 @@ class Departments extends Component {
         {departments.length > 0 && 
           <ul>
             {departments.map((dep, idx) =>
-              <li key={idx}
-                  className={classNames("dep-li", {"dep-active": chosenDeparmentId === dep._id})}
-                  onClick={() => this.fnSearchByDepartmentId(dep._id)}>
-                <a href={'#' + dep._id} onClick={(e) => e.preventDefault()}
-                  className="blue-grey-text text-darken-3">
+              <li key={idx}>
+                <a href={'#' + dep._id}
+                  onClick={(e) => {e.preventDefault(); this.fnSearchByDepartmentId(dep._id)}}
+                  className={classNames(
+                    'dep-li collapsible-header waves-effect', 
+                    {"dep-active": chosenDeparmentId === dep._id})}>
                   {dep.name}
                 </a>
-                {this.state.deparmentId === dep._id && <ul>
+                {chosenDeparmentId === dep._id && 
+                  <ul>
                   {dep.categories.map((cat, idx) =>
-                    <li className={classNames("dep-li", {"dep-active": chosenCategoryId === cat._id})}
-                        key={idx} onClick={() => setSearchCondition({ category_id: cat._id })}>
-                      <a href={'#' + cat._id} onClick={(e) => e.preventDefault()}>{cat.name}</a>
+                    <li key={idx}
+                      onClick={() => setSearchCondition({ category_id: cat._id })}>
+                      <a href={'#' + cat._id}
+                        className={classNames(
+                          'cat-li collapsible-header waves-effect', 
+                          {"cat-active": chosenCategoryId === cat._id})}
+                        onClick={(e) => e.preventDefault()}>
+                        {cat.name}
+                      </a>
                     </li>)}
-                </ul>}
+                  </ul>
+                }
               </li>
             )}
           </ul>

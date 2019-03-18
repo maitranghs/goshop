@@ -1,59 +1,53 @@
 const mongoose = require('mongoose')
 
 const Product = mongoose.model('Product')
-const Category = mongoose.model('Category')
-const AttributeValue = mongoose.model('AttributeValue')
+const Department = mongoose.model('Department')
+const Attribute = mongoose.model('Attribute')
 const ShippingRegion = mongoose.model('ShippingRegion')
+
+const search = require('../services/search')
 
 module.exports = (app) => {
 
   app.get('/api/departments', async (req, res) => {
-    const categories = await Category.find({}).populate('department_id').exec()
 
-    let departments = {}
-    categories.map((category) => {
-      const dbDepartment = category.department_id
-      let department = departments[dbDepartment._id.toString()]
-      if (!department) {
-        department = {
-          _id: dbDepartment._id.toString(),
-          name: dbDepartment.name,
-          description: dbDepartment.description,
-          categories: []
+    const departments = await Department.aggregate([
+      {
+        $lookup: {
+          from: 'categories',
+          localField: '_id',
+          foreignField: 'department_id',
+          as: 'categories'
         }
+      },
+      {
+        $sort: { '_id': 1, 'categories.name': 1 }
       }
-      department['categories'] = [...department['categories'], {
-        _id: category._id.toString(),
-        name: category.name,
-        description: category.description
-      }]
-      departments[dbDepartment._id.toString()] = department
-    })
+    ])
 
-    res.send(Object.values(departments))
+    res.send(departments)
   })
 
   app.get('/api/attributes', async (req, res) => {
-    const attributeValues = await AttributeValue.find({}).populate('attribute_id').exec()
-    let attributes = {}
-    attributeValues.map((value, idx) => {
-      let dbAttribute = value.attribute_id,
-      attribute = attributes[dbAttribute._id.toString()]
-      if (!attribute) {
-        attribute = {
-          _id: dbAttribute._id.toString(),
-          name: dbAttribute.name,
-          values: []
-        }
-      }
-      attribute.values = [...attribute.values, {
-        _id: value._id,
-        value: value.value
-      }]
-      attributes[dbAttribute._id.toString()] = attribute
-    })
 
-    res.send(Object.values(attributes))
+    const attributes = await Attribute.aggregate([
+      {
+        $lookup: {
+          from: 'attributevalues',
+          localField: '_id',
+          foreignField: 'attribute_id',
+          as: 'values'
+        }
+      },
+      {
+        $sort: { 'values.order': -1 }
+      },
+      
+      {
+        $project: { 'values.attribute_id': 0, 'values.order': 0 }
+      }
+    ])
+    res.send(attributes) 
 
   })
 
@@ -85,12 +79,12 @@ module.exports = (app) => {
           ]
         }
       })
-      // products = await Product.find({
-      //   $text: {
-      //     $search: text
-      //   }
-      // })
-      // return res.send(products)
+      products = await Product.find({
+        $text: {
+          $search: text
+        }
+      })
+      return res.send(products)
     }
 
     if (price) {

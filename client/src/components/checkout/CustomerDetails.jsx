@@ -7,7 +7,7 @@ import { customerDetails, shipping } from './formFields'
 class CustomerDetails extends Component {
   render() {
     return (
-      <div className="col s11 right">
+      <div className="col s12">
 
         <h6>Customer Details</h6>
         {customerDetails.map(({ label, name, type, validate, component }, idx) =>

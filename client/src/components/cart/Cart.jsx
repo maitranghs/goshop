@@ -18,7 +18,7 @@ class Cart extends Component {
                 <span>Shopping Cart is empty.</span>
               </div>
               <div className="row" style={{ margin: '20px 0' }}>
-                <Link to="/" className="btn">Return To Shopping</Link>
+                <Link to="/" className="btn pink lighten-1">Return To Shopping</Link>
               </div>
             </div>
           </div>
@@ -35,10 +35,10 @@ class Cart extends Component {
 
           <div className="row">
             <div className="col s8 m8 l8">
-              <Link to="/" className="btn">Return To Shopping</Link>
+              <Link to="/" className="btn pink lighten-1">Return To Shopping</Link>
             </div>
             <div className="col s3 m3 l3">
-              <Link to="/checkout" className="btn">Go To Checkout</Link>
+              <Link to="/checkout" className="btn pink lighten-1">Go To Checkout</Link>
             </div>
           </div>
 

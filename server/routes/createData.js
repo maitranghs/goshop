@@ -16,6 +16,24 @@ const Shipping = mongoose.model('Shipping')
 const Tax = mongoose.model('Tax')
 //review
 
+const getRandomImages = () => {
+  const productImages = [
+    'https://img.mytheresa.com/1088/1088/66/jpeg/catalog/product/6d/P00372427.jpg',
+    'https://img.mytheresa.com/1088/1088/66/jpeg/catalog/product/e9/P00366637.jpg',
+    'https://img.mytheresa.com/1088/1088/66/jpeg/catalog/product/9e/P00366651.jpg',
+    'https://img.mytheresa.com/1088/1088/66/jpeg/catalog/product/6e/P00366652.jpg',
+    'https://img.mytheresa.com/1088/1088/66/jpeg/catalog/product/dd/P00366650.jpg',
+    'https://img.mytheresa.com/1088/1088/66/jpeg/catalog/product/bf/P00371868.jpg',
+    'https://img.mytheresa.com/1088/1088/66/jpeg/catalog/product/48/P00366691.jpg',
+    'https://img.mytheresa.com/1088/1088/66/jpeg/catalog/product/8a/P00378331.jpg',
+    'https://img.mytheresa.com/1088/1088/66/jpeg/catalog/product/57/P00379490.jpg'
+  ]
+  let image = undefined
+  while(!image) {
+    image = productImages[Math.round((Math.random() * 1000) % 9)]
+  }
+  return image
+}
 module.exports = app => {
   app.all('/create', async (req, res) => {
     const fs = require('fs')
@@ -91,9 +109,9 @@ module.exports = app => {
                   description: arrayRow[2].trim().replace(/"/gi, ''),
                   price: arrayRow[3],
                   discounted_price: arrayRow[4],
-                  image: arrayRow[5].trim().replace(/"/gi, ''),
+                  image: getRandomImages(),
                   image_2: arrayRow[6].trim().replace(/"/gi, ''),
-                  thumbnail: arrayRow[7].trim().replace(/"/gi, ''),
+                  thumbnail: arrayRow[7].trim().replace(/"/gi, ''), 
                   display: arrayRow[8],
                   parent_sku: name.substr(0,2).toUpperCase() + Math.round((Math.random() * 10000) % 101)
                 }

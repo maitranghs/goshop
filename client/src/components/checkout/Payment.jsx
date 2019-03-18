@@ -30,7 +30,7 @@ class Payment extends Component {
   }
   render() {
     return (
-      <div className="col s11 right">
+      <div className="col s12">
         <h6>Payment Details</h6>
         <div className="row" style={{ margin: '20px 0' }}>
 

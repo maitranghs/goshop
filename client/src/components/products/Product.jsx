@@ -9,7 +9,7 @@ class Product extends Component {
         <Link to={`/product/${product._id}`}>
           <div className="card hoverable small center-align">
             <div className="card-image">
-              <img src="https://demo.storefrontcloud.io/img/600/744/resize/w/s/ws11-green_main.jpg" alt="product"/>
+              <img src={product.image} alt="product"/>
             </div>
             <div className="card-content">
               <span className="blue-grey-text text-darken-3">{product.name}</span>

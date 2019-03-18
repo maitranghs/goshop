@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-
-import { setProductAttribute } from '../../actions'
+import classNames from "classnames"
 
 class Attribute extends Component {
 
@@ -20,19 +18,11 @@ class Attribute extends Component {
     setAttribute(cartAttribute)
   }
   render() {
-    const { attribute } = this.props,
-    className = (attribute.name === 'Size') ? 'btn grey-text text-lighten-1 white button-size' : 'btn button-color',
+    const { attribute, product} = this.props,
     applyStyle = (type, value) => {
       switch(type) {
         case 'Color': return { backgroundColor: value }
         default: return { backgroundColor: 'white' }
-      }
-    },
-    applyValue = (type, value) => {
-      switch(type) {
-        case 'Color': return ''
-        case 'Size': return value
-        default: return ''
       }
     }
 
@@ -41,11 +31,17 @@ class Attribute extends Component {
         <h6>{attribute.name}</h6>
         <ul className="row">
           {attribute.values.map((attrValue, idx) => (
-            <li key={idx} className="col s1 m1 l1" onClick={() => this.chooseAttribute(attrValue.value)}>
+            <li key={idx} className="col s2"
+              onClick={() => this.chooseAttribute(attrValue.value)}>
               <a href={'#' + attrValue._id}
-                className={className}
+                onClick={(e) => e.preventDefault()}
+                className={classNames({
+                  'btn grey-text text-lighten-1 white button-size': attribute.name === 'Size',
+                  'btn button-color': attribute.name === 'Color',
+                  'attribute-active': product[attribute.name.toLowerCase()] === attrValue.value
+                })}
                 style={applyStyle(attribute.name, attrValue.value)}>
-                {applyValue(attribute.name, attrValue.value)}
+                {(attribute.name === 'Size') ? attrValue.value : ''}
               </a>
             </li>
           ))}
@@ -55,7 +51,4 @@ class Attribute extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  setAttribute: (attribute) => dispatch(setProductAttribute(attribute))
-})
-export default connect(null, mapDispatchToProps)(Attribute)
+export default Attribute

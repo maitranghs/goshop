@@ -7,7 +7,7 @@ const CartProduct = ({ product, removeFromCard }) => (
       <div className="col s6 m6 l6">
         <div className="card">
           <div className="card-image">
-            <img src="https://demo.storefrontcloud.io/img/600/744/resize/w/s/ws11-green_main.jpg" alt="product"/>
+            <img src={product.image} alt="product"/>
           </div>
         </div>
       </div>
@@ -21,10 +21,10 @@ const CartProduct = ({ product, removeFromCard }) => (
     </div>
 
     <div className="col s3 m3 l3">
-      <h5 className="red-text discounted-price">${(product.discounted_price * product.quantity).toFixed(2)}</h5>
+      <h5 className="pink-text text-lighten-1 discounted-price">${(product.discounted_price * product.quantity).toFixed(2)}</h5>
       <h6 className="origin-price">${(product.price * product.quantity).toFixed(2)}</h6>
       <br/><br/><br/>
-      {removeFromCard && <a href="#remove_from_cart" className="waves-effect waves-light btn"
+      {removeFromCard && <a href="#remove_from_cart" className="waves-effect waves-light btn pink lighten-1"
         onClick={() => removeFromCard(product)}>Remove</a>}
     </div>
 

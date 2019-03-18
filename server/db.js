@@ -5,6 +5,7 @@ var { mongoURI, username, password } = keys
 const connOptions = {
     useNewUrlParser: true,
     useCreateIndex: true,
+    textSearchEnabled: true,    
     user: username,
     pass: password
 }
