@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 
 const Product = mongoose.model('Product')
 const Category = mongoose.model('Category')
-const ProductCategory = mongoose.model('ProductCategory')
 const AttributeValue = mongoose.model('AttributeValue')
 const ShippingRegion = mongoose.model('ShippingRegion')
 
@@ -64,7 +63,7 @@ module.exports = (app) => {
     res.send(regions)
   })
 
-  /* options = { department_id: '', category_id: '', attributes: { Color: {}, Size: {}}, price: { from: 0, to: 15.5 }, text: '' } */
+  /* options = { department_id: '', category_id: '', attributes: { Color: {}, Size: {}}, price: { from: 0, to: 15.5 }, text: '', paginate: { page_limit: 5, index: 2 } } */
 
   // Product search
   app.post('/api/products/s', async (req, res) => {
@@ -72,7 +71,8 @@ module.exports = (app) => {
       category_id,
       attributes,
       price,
-      text } = req.body
+      text,
+      paginate: { page_limit, index } } = req.body
 
     console.log(attributes)
     let products, conditions = []
@@ -166,15 +166,19 @@ module.exports = (app) => {
         $project: { pa: 0 }
       })
     }
-    
-    if (conditions.length === 0) {
-      products = await Product.find({})
-    } else {
-      products = await Product.aggregate(conditions)
-    }
 
-    console.log(products.length)
-    res.send(products)
+    conditions = [ ...conditions, { $sort: { '_id': -1 } },
+                  {
+                    $facet: {
+                      metadata: [ { $count: 'total' }, { $addFields: { page: index } } ],
+                      data: [{ $skip: (index - 1) * page_limit }, { $limit: page_limit }]
+                    }
+                  } ]
+    
+    products = await Product.aggregate(conditions)
+
+    console.log(products[0].data.length)
+    res.send(products[0])
   })
   app.get('/api/product/:id', async (req, res) => {
     const productDetail = await Product.findOne({ _id: req.params.id })

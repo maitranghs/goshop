@@ -12,7 +12,7 @@ class Header extends Component {
         <nav className="top-nav grey lighten-5">
           <div className="container">
             <div className="nav-wrapper">
-              <Link to='/products' className="brand-logo teal-text text-lighten-2">&nbsp;&nbsp;Go Shop</Link>
+              <Link to='/' className="brand-logo teal-text text-lighten-2">&nbsp;&nbsp;Go Shop</Link>
               <ul className="right hide-on-med-and-down">
                 <li><a className="blue-grey-text text-darken-3" href="#!"><i className="material-icons right">search</i></a></li>
                 <li style={{ position: 'relative' }}>

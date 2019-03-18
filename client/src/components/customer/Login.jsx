@@ -8,10 +8,10 @@ import { doLogin } from '../../actions'
 
 class Login extends Component {
   render() {
-    const { submitLogin, login: { error }, current } = this.props
+    const { submitLogin, login: { error }, isLoggedIn } = this.props
     return (
       <main>
-        {current ? this.props.history.push('/products'): ''}
+        {isLoggedIn ? this.props.history.push('/'): ''}
         <div className="container">
           <h5 className="center-align">Login</h5>
           <div className="container">
@@ -52,7 +52,7 @@ Login = reduxForm({
 const mapStateToProps = (state) => ({
   login: state.customer.login,
   canSubmit: state.form.loginForm && !state.form.loginForm.syncErrors,
-  current: Object.values(state.customer.current).length > 0
+  isLoggedIn: Object.values(state.customer.current).length > 0
 })
 const mapDispatchToProps = (dispatch) => ({
   submitLogin: () => dispatch(doLogin())

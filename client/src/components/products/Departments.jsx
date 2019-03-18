@@ -36,7 +36,7 @@ class Departments extends Component {
               <li key={idx}
                   className={classNames("dep-li", {"dep-active": chosenDeparmentId === dep._id})}
                   onClick={() => this.fnSearchByDepartmentId(dep._id)}>
-                <a href={'#' + dep._id}
+                <a href={'#' + dep._id} onClick={(e) => e.preventDefault()}
                   className="blue-grey-text text-darken-3">
                   {dep.name}
                 </a>
@@ -44,7 +44,7 @@ class Departments extends Component {
                   {dep.categories.map((cat, idx) =>
                     <li className={classNames("dep-li", {"dep-active": chosenCategoryId === cat._id})}
                         key={idx} onClick={() => setSearchCondition({ category_id: cat._id })}>
-                      <a href={'#' + cat._id}>{cat.name}</a>
+                      <a href={'#' + cat._id} onClick={(e) => e.preventDefault()}>{cat.name}</a>
                     </li>)}
                 </ul>}
               </li>

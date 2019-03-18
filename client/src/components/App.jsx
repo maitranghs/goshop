@@ -28,14 +28,13 @@ class App extends Component {
         <div>
           <Header/>
           <Switch>
-            <Route path="/products" component={Products}/>
+            <Route exact path="/" component={Products}/>
             <Route path="/product/:_id" component={ProductDetail}/>
             <Route path="/cart" component={Cart}/>
             <Route path="/checkout" component={Checkout}/>
             <Route path="/template" component={Home}/>
             <Route path="/login" component={Login}/>
             <Route path="/register" component={Register}/>
-            <Route path="/register" component={Home}/>
           </Switch>
           <Footer/>
         </div>

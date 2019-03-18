@@ -1,6 +1,7 @@
 import { START_SEARCH_PRODUCTS,
         SET_PRODUCTS,
         SET_SEARCH_PRODUCTS_CONDITIONS,
+        SET_PAGINATION_INDEX,
         SET_SEARCH_PRODUCTS_ATTRIBUTE_CONDITIONS,
         RESET_SEARCH_PRODUCTS_CONDITIONS,
         START_FETCH_PRODUCT,
@@ -10,10 +11,11 @@ export const startSearchProducts = () => ({
   type: START_SEARCH_PRODUCTS
 })
 
-export const setProducts = (products) => ({
+export const setProducts = (products, total) => ({
   type: SET_PRODUCTS,
   payload: {
-    products
+    products,
+    total
   }
 })
 
@@ -29,6 +31,13 @@ export const setSearchAttributeCondition = (attribute) => ({
   type: SET_SEARCH_PRODUCTS_ATTRIBUTE_CONDITIONS,
   payload: {
     attribute
+  }
+})
+
+export const setPaginationIndex = (index) => ({
+  type: SET_PAGINATION_INDEX,
+  payload: {
+    index
   }
 })
 

@@ -43,7 +43,7 @@ class Filter extends Component {
 
         <div className="right-align">
           <a href="#clear_filter" className="waves-effect waves-light btn"
-            onClick={() => setSearchCondition(null)}>Clear</a>
+            onClick={(e) => {e.preventDefault(); setSearchCondition(null)}}>Clear</a>
         </div>
 
       </div>

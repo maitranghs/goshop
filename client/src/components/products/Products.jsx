@@ -7,8 +7,9 @@ import Product from './Product'
 
 import Breadcrumb from '../Breadcrumb'
 import Loading from '../Loading'
+import Pagination from './Pagination'
 
-import { searchProducts } from '../../actions'
+import { searchProducts, setPaginationIndex } from '../../actions'
 
 class Products extends Component {
 
@@ -17,7 +18,7 @@ class Products extends Component {
     getProducts()
   }
   render() {
-    const { products, total } = this.props
+    const { products, total, pageTotal, index, setPaginationIndex } = this.props
     return (
       <main>
         <div className="container">
@@ -29,16 +30,15 @@ class Products extends Component {
             <div className="col s9">
               {false && <Breadcrumb/>}
               {total === 0 && <Loading/>}
-              {
-                (total > 0) &&
+              {(total > 0) &&
                 <div>
-                  <h5 className="right-align">Total: {total}</h5>
+                  <h5>Products</h5>
                   <div className="divider"></div>
                   <div className="row">
                     {products.map((e,i) => <Product key={i} product={e}/>)}
                   </div>
-                </div>
-              }
+                  <Pagination total={total} pageTotal={pageTotal} index={index} paginate={setPaginationIndex}/>
+                </div>}
             </div>
           </div>
         </div>
@@ -49,10 +49,13 @@ class Products extends Component {
 
 const mapStateToProps = (state) => ({
   products: state.products.list,
-  total: state.products.list.length
+  total: state.products.total,
+  pageTotal: state.products.pageTotal,
+  index: state.products.options.paginate.index
 })
 const mapDispatchToProps = (dispatch) => ({
-  getProducts: () => dispatch(searchProducts())
+  getProducts: () => dispatch(searchProducts()),
+  setPaginationIndex: (index) => dispatch(setPaginationIndex(index))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Products)

@@ -15,9 +15,9 @@ export const searchProducts = () =>
     dispatch(productsAction.startSearchProducts())
 
     const { options } = getState().products
-    const products = await axios.post('/api/products/s', options)
+    const { data: { metadata, data } } = await axios.post('/api/products/s', options)
 
-    dispatch(productsAction.setProducts(products.data))
+    dispatch(productsAction.setProducts(data, metadata[0].total))
   }
 
 export const initApp = () =>
@@ -48,6 +48,12 @@ export const setSearchCondition = (option) =>
   (dispatch) => {
     if (option) dispatch(productsAction.setSearchCondition(option))
     else dispatch(productsAction.resetSearchCondition())
+    dispatch(searchProducts())
+  }
+
+export const setPaginationIndex = (index) =>
+  (dispatch) => {
+    dispatch(productsAction.setPaginationIndex(index))
     dispatch(searchProducts())
   }
 
