@@ -13,31 +13,31 @@ class Search extends Component {
     const total = products.length
     return (
       <div>
-      <div className="modal modal-fixed-footer modal-center-search">
-        <div className="modal-content">
-          <div className="search-input-group">
-            <i className="material-icons search-icon">search</i>
-            <input type='text' placeholder='Search products...' onChange={(e) => search(e.target.value)}/>
+        <div className="modal modal-fixed-footer modal-center-search">
+          <div className="modal-content">
+            <div className="search-input-group">
+              <i className="material-icons search-icon">search</i>
+              <input type='text' placeholder='Search products...' onChange={(e) => search(e.target.value)}/>
+            </div>
+            {loading && <Loading/>}
+            {!loading && total === 0 && 
+              <div>
+                <div className="left"><h6>No products found.</h6></div>
+              </div>}
+            {!loading && total > 0 &&
+              <div className="row">
+                {products.map((e,i) => <Product key={i} product={e} callback={() => window.location.href = `/product/${e._id}`}/>)}
+              </div>}
           </div>
-          {loading && <Loading/>}
-          {!loading && total === 0 && 
-            <div>
-              <div className="left"><h6>No products found.</h6></div>
-            </div>}
-          {!loading && total > 0 &&
-            <div className="row">
-              {products.map((e,i) => <Product key={i} product={e} callback={() => window.location.href = `/product/${e._id}`}/>)}
-            </div>}
+          <div className="modal-footer">
+            <a href="#Ok"
+              onClick={(e) => { e.preventDefault(); close()}}
+              className="modal-close waves-effect btn pink lighten-1">
+              OK
+            </a>
+          </div>
         </div>
-        <div className="modal-footer">
-          <a href="#Ok"
-            onClick={(e) => { e.preventDefault(); close()}}
-            className="modal-close waves-effect btn pink lighten-1">
-            OK
-          </a>
-        </div>
-      </div>
-      <div className='modal-overlay' style={{'zIndex': 1002, display: 'block', 'opacity': 0.5}}></div>
+        <div className='modal-overlay modal-overlay-show'></div>
       </div>
     )
   }

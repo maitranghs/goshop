@@ -1,11 +1,9 @@
 import React from 'react'
 
 export default ({ input, label, options, keyvalue: { key, value }, showText, meta: { error, touched } }) => {
-  document.addEventListener('DOMContentLoaded', function() {
-    window.M.FormSelect.init(document.querySelectorAll('select'), options)
-  })
+  window.M.FormSelect.init(document.querySelectorAll('select'), {})
   return (
-    <div className="input-field">
+    <div className="input-field" style={{ padding: '10px 0' }}>
       <select {...input}>
         <option value="" disabled>{showText}</option>
         {options && options.length > 0 &&

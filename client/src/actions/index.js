@@ -126,15 +126,23 @@ export const removeFromCart = (product) =>
     dispatch(notificationAction.setModalContent('Shopping Cart', 'Product has been removed.'))
   }
 
-export const placeOrder = () =>
-  async (dispatch, getState, { axios }) => {
-    const { cart, form, stripe } = getState()
+export const placeOrder = (history) =>
+  async (dispatch, getState, { axios, dataCache }) => {
+    const { cart, form, stripe, customer } = getState()
+
     await axios.post('/api/charge', {
       cart: cart,
-      customer: form.customerDetailsForm.values,
+      customer: { ...customer.current, ...form.customerDetailsForm.values },
       token: stripe.token
     })
+
+    // Reset cart
+    const initialState = { products: [], summary: {} }
+    dataCache.store({ key: SHOPPING_CART, value: initialState })
+    dispatch(cartAction.initializeCart(initialState))
+
     dispatch(notificationAction.setModalContent('Information', 'Place an Order successfully.'))
+    history.push('/')
   }
 
 export const doLogin = () =>
@@ -177,8 +185,8 @@ export const searchProductsByText = (text) =>
     dispatch(searchAction.startSearch())
 
     if (text) {
-      const post = debounce(axios.post, 300)
-      const products = await post('/api/products/s', { text })
+      const post = debounce(axios.post, 500)
+      const products = await post('/api/products/text/s', { text })
       dispatch(searchAction.fetchSearchProducts(products.data))
     }
     dispatch(searchAction.stopSearch())

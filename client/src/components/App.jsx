@@ -38,14 +38,11 @@ class App extends Component {
             <Route path="/register" component={Register}/>
           </Switch>
           <Footer/>
-          {this.props.show && <Notification/>}
+          <Notification/>
         </div>
       </BrowserRouter>
     )
   }
 }
 
-const mapStateToProps = (state) => ({
-  show: state.notification.show
-})
-export default connect(mapStateToProps, { initApp })(App)
+export default connect(null, { initApp })(App)

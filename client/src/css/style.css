@@ -102,6 +102,11 @@ img {
   z-index: 1003;
   transition: all .3s ease-out;
 }
+.modal-overlay-show {
+  z-index: 1002;
+  display: block;
+  opacity: 0.5;
+}
 
 .modal-center-search {
   display: block;

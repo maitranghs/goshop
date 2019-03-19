@@ -1,28 +1,33 @@
 import React, { Component } from 'react'
-import { reduxForm, Field, formValueSelector } from 'redux-form'
+import { reduxForm, Field } from 'redux-form'
 import { connect } from 'react-redux'
 
 import { customerDetails, shipping } from './formFields'
 
 class CustomerDetails extends Component {
   render() {
+    const { shippingRegions, isLogged } = this.props
     return (
       <div className="col s12">
 
-        <h6>Customer Details</h6>
-        {customerDetails.map(({ label, name, type, validate, component }, idx) =>
-          <Field
-            key={idx}
-            component={component}
-            type={type}
-            label={label}
-            name={name}
-            validate={validate}/>
-        )}
+        {!isLogged && 
+          <div>
+            <h6>Customer Details</h6>
+            {customerDetails.map(({ label, name, type, validate, component }, idx) =>
+              <Field
+                key={idx}
+                component={component}
+                type={type}
+                label={label}
+                name={name}
+                validate={validate}/>
+            )}
+          </div>
+        }
 
         <h6>Shipping Details</h6>
         {shipping.map(({ label, name, type, validate, component, options, keyvalue, showText }, idx) => {
-          options = (name === 'shipping_region_id' && this.props.shippingRegions.length > 0) ? this.props.shippingRegions : options
+          options = (name === 'shipping_region_id' && shippingRegions.length > 0) ? shippingRegions : options
           return <Field
                   key={idx}
                   component={component}
@@ -43,13 +48,11 @@ class CustomerDetails extends Component {
 }
 CustomerDetails = reduxForm({
   form: 'customerDetailsForm',
-  destroyOnUnmount: false
+  destroyOnUnmount: true
 })(CustomerDetails)
-
-const selector = formValueSelector('customerDetailsForm')
 
 const mapStateToProps = (state) => ({
   shippingRegions: state.shipping.regions,
-  password: selector(state, 'password')
+  isLogged: Object.values(state.customer.current).length > 0,
 })
 export default connect(mapStateToProps)(CustomerDetails)

@@ -36,7 +36,7 @@ class Checkout extends Component {
               <a href="#place_the_order"
                 className={classNames("btn right pink lighten-1",
                   { 'disabled': this.state.paymentErrors || this.props.customerDetailsFormErrors || this.props.reviewFormErrors })}
-                onClick={(e) => {e.preventDefault();this.props.placeOrder()}}>
+                onClick={(e) => {e.preventDefault();this.props.placeOrder(this.props.history)}}>
                 Place The Order
               </a>
             </div>
@@ -57,6 +57,6 @@ const mapStateToProps = (state) => ({
   reviewFormErrors: state.form.reviewForm && state.form.reviewForm.syncErrors
 })
 const mapDispatchToProps = (dispatch) => ({
-  placeOrder: () => dispatch(placeOrder())
+  placeOrder: (history) => dispatch(placeOrder(history))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Checkout)
