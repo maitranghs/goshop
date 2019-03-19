@@ -66,19 +66,11 @@ module.exports = (app) => {
       attributes,
       price,
       text,
-      paginate: { page_limit, index } } = req.body
+      paginate } = req.body
 
-    console.log(attributes)
+    console.log(text)
     let products, conditions = []
     if (text) {
-      conditions.push({
-        $match: {
-          $or: [
-            { name: text },
-            { description: text }
-          ]
-        }
-      })
       products = await Product.find({
         $text: {
           $search: text
@@ -161,6 +153,7 @@ module.exports = (app) => {
       })
     }
 
+    const { page_limit, index } = paginate
     conditions = [ ...conditions, { $sort: { '_id': -1 } },
                   {
                     $facet: {

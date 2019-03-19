@@ -95,3 +95,27 @@ img {
   mix-blend-mode: multiply;
   vertical-align: top;
 }
+
+.modal-bottom-noti {
+  display: block;
+  bottom: 0 !important;
+  z-index: 1003;
+  transition: all .3s ease-out;
+}
+
+.modal-center-search {
+  display: block;
+  z-index: 1003;
+  transition: all .3s ease-out;
+}
+
+.search-input-group {
+  display: flex;
+}
+.search-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  margin-right: 10px;
+}

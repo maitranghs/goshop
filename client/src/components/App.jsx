@@ -13,6 +13,7 @@ import Cart from './cart/Cart'
 import Checkout from './checkout/Checkout'
 import Login from './customer/Login'
 import Register from './customer/Register'
+import Notification from './modals/Notification'
 
 import "../css/style.css"
 
@@ -29,7 +30,7 @@ class App extends Component {
           <Header/>
           <Switch>
             <Route exact path="/" component={Products}/>
-            <Route path="/product/:_id" component={ProductDetail}/>
+            <Route exact path="/product/:_id" component={ProductDetail}/>
             <Route path="/cart" component={Cart}/>
             <Route path="/checkout" component={Checkout}/>
             <Route path="/template" component={Home}/>
@@ -37,10 +38,14 @@ class App extends Component {
             <Route path="/register" component={Register}/>
           </Switch>
           <Footer/>
+          {this.props.show && <Notification/>}
         </div>
       </BrowserRouter>
     )
   }
 }
 
-export default connect(null, { initApp })(App)
+const mapStateToProps = (state) => ({
+  show: state.notification.show
+})
+export default connect(mapStateToProps, { initApp })(App)

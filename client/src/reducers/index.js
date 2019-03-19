@@ -7,6 +7,8 @@ import { reducer as attributesReducer } from './attributes'
 import { reducer as shippingReducer } from './shipping'
 import { reducer as stripeReducer } from './stripe'
 import { reducer as customerReducer } from './customer'
+import { reducer as notificationReducer } from './notification'
+import { reducer as searchReducer } from './search'
 import { reducer as reduxForm } from 'redux-form'
 
 export default combineReducers({
@@ -18,5 +20,7 @@ export default combineReducers({
   shipping: shippingReducer,
   stripe: stripeReducer,
   customer: customerReducer,
+  notification: notificationReducer,
+  search: searchReducer,
   form: reduxForm
 })

@@ -3,10 +3,13 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
 import { doLogout } from '../actions'
+import { toggleShowSearchModal } from '../actions/search'
+
+import Search from './modals/Search';
 
 class Header extends Component {
   render() {
-    const { cartNumber, isLogged, logout } = this.props
+    const { showSearch, cartNumber, isLogged, logout, openSearch } = this.props
     return (
       <header>
         <nav className="top-nav grey lighten-5">
@@ -14,7 +17,13 @@ class Header extends Component {
             <div className="nav-wrapper">
               <Link to='/' className="brand-logo pink-text text-lighten-1">&nbsp;&nbsp;Go Shop</Link>
               <ul className="right hide-on-med-and-down">
-                <li><a className="blue-grey-text text-darken-3" href="#!"><i className="material-icons right">search</i></a></li>
+                <li>
+                  <a className="blue-grey-text text-darken-3"
+                      href="#search"
+                      onClick={(e) => {e.preventDefault(); openSearch()}}>
+                    <i className="material-icons right">search</i>
+                  </a>
+                </li>
                 <li style={{ position: 'relative' }}>
                   <Link className="blue-grey-text text-darken-3" to='/cart'>
                     <i className="material-icons right">shopping_cart</i>
@@ -45,6 +54,7 @@ class Header extends Component {
             </div>
           </div>
         </nav>
+        {showSearch && <Search/>}
       </header>
     )
   }
@@ -53,9 +63,11 @@ class Header extends Component {
 const mapStateToProps = (state) => ({
   cartNumber: state.cart.products.reduce((total, product) => total + product.quantity, 0),
   current: state.customer.current,
-  isLogged: Object.values(state.customer.current).length > 0
+  isLogged: Object.values(state.customer.current).length > 0,
+  showSearch: state.search.show
 })
 const mapDispatchToProps = (dispatch) => ({
-  logout: () => dispatch(doLogout())
+  logout: () => dispatch(doLogout()),
+  openSearch: () => dispatch(toggleShowSearchModal(true))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Header)

@@ -2,8 +2,7 @@ import React from 'react'
 
 export default ({ input, label, options, keyvalue: { key, value }, showText, meta: { error, touched } }) => {
   document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('select')
-    window.M.FormSelect.init(elems, options)
+    window.M.FormSelect.init(document.querySelectorAll('select'), options)
   })
   return (
     <div className="input-field">

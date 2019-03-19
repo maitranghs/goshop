@@ -17,26 +17,33 @@ class Register extends Component {
         {status !== SUCCESS && <div className="container">
           <h5 className="center-align">Register</h5>
           <div className="container">
-            <div className="red-text" style={{ marginBottom: '20px' }}>
-              {error}
+
+            <div className="row">
+              <div className="col s3"></div>
+              <div className="col s6">
+                <div className="red-text" style={{ marginBottom: '20px' }}>
+                  {error}
+                </div>
+                {customerDetails.map(({ label, name, type, validate, component }, idx) => 
+                  <Field
+                    key={idx}
+                    component={component}
+                    type={type}
+                    label={label}
+                    name={name}
+                    validate={validate}/>
+                )}
+              </div>
             </div>
-            <div className="col s6 m6 l6 ">
-              {customerDetails.map(({ label, name, type, validate, component }, idx) => 
-                <Field
-                  key={idx}
-                  component={component}
-                  type={type}
-                  label={label}
-                  name={name}
-                  validate={validate}/>
-              )}
-            </div>
-            <div className="col s5 center-align">
-              <a href='#register'
-                className={classNames('btn', { 'disabled': !this.props.canSubmit })}
-                onClick={(e) => {e.preventDefault(); submitRegister();}}>
-                Submit
-              </a>
+            
+            <div className="row">
+              <div className="col s12 center-align">
+                <a href='#register'
+                  className={classNames('btn pink lighten-1', { 'disabled': !this.props.canSubmit })}
+                  onClick={(e) => {e.preventDefault(); submitRegister();}}>
+                  Submit
+                </a>
+              </div>
             </div>
             
           </div>

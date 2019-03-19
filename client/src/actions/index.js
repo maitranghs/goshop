@@ -5,6 +5,8 @@ import * as attributeAction from './attributes'
 import * as cartAction from './cart'
 import * as shippingAction from './shipping'
 import * as customerAction from './customer'
+import * as notificationAction from './notification'
+import * as searchAction from './search'
 
 import { SUCCESS, FAIL } from './apiStatus'
 
@@ -114,12 +116,14 @@ export const addToCart = (product) =>
   (dispatch) => {
     dispatch(cartAction.addToCart(product))
     dispatch(updateCartSummary())
+    dispatch(notificationAction.setModalContent('Shopping Cart', 'Product has been added.'))
   }
 
 export const removeFromCart = (product) =>
   (dispatch) => {
     dispatch(cartAction.removeFromCart(product))
     dispatch(updateCartSummary())
+    dispatch(notificationAction.setModalContent('Shopping Cart', 'Product has been removed.'))
   }
 
 export const placeOrder = () =>
@@ -130,6 +134,7 @@ export const placeOrder = () =>
       customer: form.customerDetailsForm.values,
       token: stripe.token
     })
+    dispatch(notificationAction.setModalContent('Information', 'Place an Order successfully.'))
   }
 
 export const doLogin = () =>
@@ -140,6 +145,7 @@ export const doLogin = () =>
       dispatch(customerAction.loginSuccess(status))
       const { data: { data } } = await axios.get('/api/auth/current')
       dispatch(customerAction.fetchCurrent(data))
+      dispatch(notificationAction.setModalContent('Information', 'You have logged in.'))
     }
     if (status === FAIL) {
       dispatch(customerAction.loginFail(status, error))
@@ -150,6 +156,7 @@ export const doLogout = () =>
   async (dispatch, getState, { axios }) => {
     await axios.get('/api/auth/logout')
     dispatch(customerAction.logout())
+    dispatch(notificationAction.setModalContent('Information', 'You have logged out.'))
   }
 
 export const register = () =>
@@ -158,8 +165,21 @@ export const register = () =>
     const { data: { status, error } } = await axios.post('/api/auth/register', registerForm.values)
     if (status === SUCCESS) {
       dispatch(customerAction.registerSuccess(status))
+      dispatch(notificationAction.setModalContent('Information', 'You have registered. Please login.'))
     }
     if (status === FAIL) {
       dispatch(customerAction.registerFail(status, error))
     }
+  }
+
+export const searchProductsByText = (text) =>
+  async (dispatch, getState, { axios, debounce }) => {
+    dispatch(searchAction.startSearch())
+
+    if (text) {
+      const post = debounce(axios.post, 300)
+      const products = await post('/api/products/s', { text })
+      dispatch(searchAction.fetchSearchProducts(products.data))
+    }
+    dispatch(searchAction.stopSearch())
   }
