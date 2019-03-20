@@ -28,7 +28,7 @@ This is a very simple e-commercial application is written in React and Node JS.
 ### 2.2 Server side - NodeJS
 - Bcrypt to encrypt and check valid customer's password
 - Cookie-session to save session data on the client within cookie when authorization
-- Cxpress a simple framework to build a node server
+- Express a simple framework to build a node server
 - Mongoose, an object modeling tool for MongoDB
 - Nodemailer to handle sending mail
 - Passport, passport-local to handle authorization
