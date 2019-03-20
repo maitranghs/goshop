@@ -7,7 +7,7 @@ const Order = mongoose.model('Order')
 const OrderDetail = mongoose.model('OrderDetail')
 
 const template = require('../services/template')
-const email = require('../services/email')
+const emailService = require('../services/email')
 
 module.exports = (app) => {
   app.post('/api/charge', async (req, res) => {
@@ -28,21 +28,37 @@ module.exports = (app) => {
       console.log('[Stripe: ]', err.message)
     }
 
-    // hash password TODO
-    // check customer exist
+    
+    // Check logged in
+    if (customer._id) {
+      await Customer.findOneAndUpdate({ _id: customer._id }, customer)
+    } else {
+      // Check customer exist
+      const existingCustomer = await Customer.findOne({ email: customer.email })
+      if (existingCustomer) {
 
-    // Create a new customer
-    const dbCustomer = await Customer.create(customer)
+        customer._id = existingCustomer._id
+        await Customer.findOneAndUpdate({ _id: customer._id }, customer)
+      } else {
+        let customerObject = new Customer(customer)
+        customerObject.password = customerObject.generateHash(customer.password)
+        await customerObject.save()
+
+        customer._id = customerObject._id
+      }
+    }
+
     // Create order
     const dbOrder = await Order.create({
       total_amount: cart.summary.grandtotal,
       created_on: Date.now(),
       status: 'pending',
       comments: 'Initialized Order',
-      customer_id: dbCustomer._id,
+      customer_id: customer._id,
       shipping_id: customer.shipping_id,
       tax_id: customer.tax_id
     })
+
     // Create list of order details
     cart.products.map(product => {
       OrderDetail.create({
@@ -67,11 +83,11 @@ module.exports = (app) => {
         <p>Product size: ${product.size}</p>
         <p>Product quantity: ${product.quantity}</p>
         <p>Product unit_cost: ${product.discounted_price}</p>
-        -------------------------------------------------<br/>`,
+        -------------------------------------------<br/>`,
     '')
     // Prepair content of mail
     const mailContent = template.fillTemplate(template.ORDER_CONFIRMATION_HTML_TEMPLATE, {
-      customer_name: `${dbCustomer.first_name} ${dbCustomer.last_name}`,
+      customer_name: `${customer.first_name} ${customer.last_name}`,
       order_id: dbOrder._id.toString(),
       shipping_type: 'Next Day Delivery ($20)',
       shipping_cost: `$${20.00.toFixed(2)}`,
@@ -84,7 +100,7 @@ module.exports = (app) => {
       comments: dbOrder.comments,
       orderDetails: orderDetails
     })
-    email.sendEmail(['maitrang88bk@gmail.com'],
+    emailService.sendEmail([customer.email],
       'Your order details from Go Shop',
       mailContent.data)
 

@@ -40,7 +40,7 @@ require('./routes/ordersRoutes')(app)
 require('./routes/authRoutes')(app)
 require('./routes/cutomerRoutes')(app)
 
-require('./routes/createData')(app)
+// require('./routes/createData')(app)
 
 if (['production'].includes(process.env.NODE_ENV)) {
   app.use(express.static('client/build'))

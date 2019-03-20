@@ -9,6 +9,7 @@ const search = require('../services/search')
 
 module.exports = (app) => {
 
+  // Departments
   app.get('/api/departments', async (req, res) => {
 
     const departments = await Department.aggregate([
@@ -28,6 +29,7 @@ module.exports = (app) => {
     res.send(departments)
   })
 
+  // Attributes
   app.get('/api/attributes', async (req, res) => {
 
     const attributes = await Attribute.aggregate([
@@ -40,133 +42,60 @@ module.exports = (app) => {
         }
       },
       {
-        $sort: { 'values.order': -1 }
+        $sort: { 'values._id': -1 }
       },
       
       {
-        $project: { 'values.attribute_id': 0, 'values.order': 0 }
+        $project: { 'values.attribute_id': 0 }
       }
     ])
     res.send(attributes) 
 
   })
 
+  // Shipping regions
   app.get('/api/shippingregions', async (req, res) => {
     const regions = await ShippingRegion.find({})
 
     res.send(regions)
   })
 
-  /* options = { department_id: '', category_id: '', attributes: { Color: {}, Size: {}}, price: { from: 0, to: 15.5 }, text: '', paginate: { page_limit: 5, index: 2 } } */
+  // Product search by text
+  app.post('/api/products/text/s', async (req, res) => {
+    const { text } = req.body
 
-  // Product search
+    const products = await Product.find({
+      $text: {
+        $search: text
+      }
+    })
+    return res.send(products)
+
+  })
+
+  /* options = 
+    { department_id: '',
+      category_id: '',
+      attributes: { Color: {}, Size: {}},
+      price: { from: 0, to: 15.5 },
+      paginate: { page_limit: 5, index: 2 } } */
   app.post('/api/products/s', async (req, res) => {
     const { department_id,
       category_id,
       attributes,
       price,
-      text,
       paginate } = req.body
 
-    console.log(text)
-    let products, conditions = []
-    if (text) {
-      products = await Product.find({
-        $text: {
-          $search: text
-        }
-      })
-      return res.send(products)
-    }
-
-    if (price) {
-      conditions.push({
-        $match: {
-          $and: [
-            { price: { $gte: price.from } },
-            { price: { $lte: price.to } }
-          ]
-        }
-      })
-    }
-
-    if (category_id) {
-      conditions.push({
-        $lookup: {
-          from: 'productcategories',
-          localField: '_id',
-          foreignField: 'product_id',
-          as: 'pc'
-        }
-      })
-      conditions.push({
-        $match: { 'pc.category_id': { $eq: mongoose.Types.ObjectId(category_id) } }
-      })
-      conditions.push({
-        $project: { pc: 0 }
-      })
-    }
-
-    if (department_id) {
-      conditions.push({
-        $lookup: {
-          from: 'productcategories',
-          localField: '_id',
-          foreignField: 'product_id',
-          as: 'pc'
-        }
-      })
-      conditions.push({
-        $lookup: {
-          from: 'categories',
-          localField: 'pc.category_id',
-          foreignField: '_id',
-          as: 'c'
-        }
-      })
-      conditions.push({
-        $match: { 'c.department_id': { $eq: mongoose.Types.ObjectId(department_id) } }
-      })
-      conditions.push({
-        $project: { pc: 0, c: 0 }
-      })
-    }
-
-    const attributeArray = Object.values(attributes)
-    if (attributeArray.length > 0) {
-      conditions.push({
-        $lookup: {
-          from: 'productattributes',
-          localField: '_id',
-          foreignField: 'product_id',
-          as: 'pa'
-        }
-      })
-      const mapAttributes = attributeArray.map(attribute => 
-                  ({ 'pa.attribute_value_id': { $eq: mongoose.Types.ObjectId(attribute._id) } }))
-
-      conditions.push({
-        $match: { $and: mapAttributes }
-      })
-      conditions.push({
-        $project: { pa: 0 }
-      })
-    }
-
-    const { page_limit, index } = paginate
-    conditions = [ ...conditions, { $sort: { '_id': -1 } },
-                  {
-                    $facet: {
-                      metadata: [ { $count: 'total' }, { $addFields: { page: index } } ],
-                      data: [{ $skip: (index - 1) * page_limit }, { $limit: page_limit }]
-                    }
-                  } ]
+    const conditions = [
+          ...search.searchProductsConditions(mongoose, price, category_id, department_id, attributes),
+          ...search.paginating(paginate)
+        ]
     
-    products = await Product.aggregate(conditions)
-
-    console.log(products[0].data.length)
+    const products = await Product.aggregate(conditions)
     res.send(products[0])
   })
+
+  // Product detail
   app.get('/api/product/:id', async (req, res) => {
     const productDetail = await Product.findOne({ _id: req.params.id })
 

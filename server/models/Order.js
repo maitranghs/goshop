@@ -9,7 +9,8 @@ const orderSchema = new Schema({
   comments: String,
   customer_id: {
     type: Schema.Types.ObjectId,
-    ref: 'Customer'
+    ref: 'Customer',
+    required: true
   },
   auth_code: String,
   reference: String,
