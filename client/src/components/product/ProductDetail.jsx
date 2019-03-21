@@ -21,13 +21,15 @@ class ProductDetail extends Component {
         {hasDetail &&
           <div className="container">
             <div className="row">
-              <div className="col s6">
+              <div className="col s1"></div>
+              <div className="col s4">
                 <div className="card">
                   <div className="card-image">
-                    <img src={product.image} alt="product"/>
+                    <img src={'https://raw.githubusercontent.com/zandoan/turing-fullstack/master/Images/product_images/' + product.image} alt="product"/>
                   </div>
                 </div>
               </div>
+              <div className="col s1"></div>
               <div className="col s6 right">
                 <div className="row">
                   <div className="col s12">
@@ -35,7 +37,9 @@ class ProductDetail extends Component {
                     <span className="grey-text text-lighten-1">
                       SKU: {product.size !== undefined && `${product.parent_sku}-${product.size}-${product.color}`}
                     </span>
-                    <h5 className="pink-text text-lighten-1 discounted-price">${(product.discounted_price * product.quantity).toFixed(2)}</h5>
+                    <h5 className="pink-text text-lighten-1 discounted-price">
+                      {product.discounted_price === 0 ? 'FREE' : '$' + (product.discounted_price * product.quantity).toFixed(2)}
+                    </h5>
                     <span className="blue-grey-text text-darken-3 origin-price">${(product.price * product.quantity).toFixed(2)}</span>
                   </div>
                 </div>

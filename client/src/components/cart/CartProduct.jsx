@@ -7,7 +7,7 @@ const CartProduct = ({ product, removeFromCard }) => (
       <div className="col s6 m6 l6">
         <div className="card">
           <div className="card-image">
-            <img src={product.image} alt="product"/>
+            <img src={'https://raw.githubusercontent.com/zandoan/turing-fullstack/master/Images/product_images/' + product.image} alt="product"/>
           </div>
         </div>
       </div>
