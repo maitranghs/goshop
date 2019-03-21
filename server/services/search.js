@@ -4,8 +4,8 @@ const searchProductsConditions = (mongoose, price, category_id, department_id, a
     conditions.push({
       $match: {
         $and: [
-          { price: { $gte: price.from } },
-          { price: { $lte: price.to } }
+          { discounted_price: { $gte: price.from } },
+          { discounted_price: { $lte: price.to } }
         ]
       }
     })
