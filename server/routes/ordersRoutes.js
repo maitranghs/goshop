@@ -76,15 +76,16 @@ module.exports = (app) => {
     // Send mail
     // Order details
     const orderDetails = cart.products.reduce((detail, product) => 
-      `${detail}
-        <p>Product name: ${product.name}</p>
-        <p>Product sku: ${product.sku}</p>
-        <p>Product color: ${product.color}</p>
-        <p>Product size: ${product.size}</p>
-        <p>Product quantity: ${product.quantity}</p>
-        <p>Product unit_cost: ${product.discounted_price}</p>
-        -------------------------------------------<br/>`,
-    '')
+      detail +
+      template.fillTemplate(template.PRODUCT_DETAIL_PART, {
+        name: product.name,
+        sku: product.sku,
+        color: product.color,
+        size: product.size,
+        quantity: product.quantity,
+        discounted_price: product.discounted_price
+      }).data, '')
+
     // Prepair content of mail
     const mailContent = template.fillTemplate(template.ORDER_CONFIRMATION_HTML_TEMPLATE, {
       customer_name: `${customer.first_name} ${customer.last_name}`,

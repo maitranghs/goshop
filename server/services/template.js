@@ -26,5 +26,6 @@ const fillTemplate = (templateFile, keyValues) => {
 
 module.exports = {
   fillTemplate,
-  ORDER_CONFIRMATION_HTML_TEMPLATE: 'order-confirmation.html'
+  ORDER_CONFIRMATION_HTML_TEMPLATE: 'order-confirmation.html',
+  PRODUCT_DETAIL_PART: 'product-detail-part.html'
 }
