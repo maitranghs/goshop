@@ -31,7 +31,7 @@ class Search extends Component {
           </div>
           <div className="modal-footer">
             <a href="#Ok"
-              onClick={(e) => { e.preventDefault(); close()}}
+              onClick={(e) => { e.preventDefault(); close() }}
               className="modal-close waves-effect btn pink lighten-1">
               OK
             </a>

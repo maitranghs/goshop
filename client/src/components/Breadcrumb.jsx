@@ -6,7 +6,7 @@ class Breadcrumb extends Component {
       <div>
         <nav>
           <div className="nav-wrapper">
-            <div className="col s12 teal lighten-2">
+            <div className="col s12 pink lighten-2">
               <a className="breadcrumb" href="#!">All</a>
               <a className="breadcrumb" href="#!">Reagional</a>
               <a className="breadcrumb" href="#!">Italian</a>

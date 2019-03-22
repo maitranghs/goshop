@@ -20,8 +20,9 @@ export const shipping = [
   { label: 'City*', name: 'city', type: 'text', validate: [ required ], component: TextField },
   { label: 'State / Province', name: 'region', type: 'text', validate: [], component: TextField },
   { label: 'Zip-code*', name: 'postal_code', type: 'text', validate: [ required ], component: TextField },
-  { label: 'Country*', name: 'country', type: 'text', validate: [ required ], component: SelectField, options: countries, keyvalue: { key: 'code', value: 'name' }, showText: 'Choose Country...' },
-  { label: 'Shipping Region*', name: 'shipping_region_id', type: 'text', validate: [ required ], component: SelectField, keyvalue: { key: '_id', value: 'shipping_region' }, showText: 'Choose Shipping Region...' },
+  { label: 'Country*', name: 'country', type: 'select', validate: [ required ], component: SelectField, options: countries, keyvalue: { key: 'code', value: 'name' }, showText: 'Choose Country...' },
+  { label: 'Shipping Region*', name: 'shipping_region_id', type: 'select', validate: [ required ], component: SelectField, keyvalue: { key: '_id', value: 'shipping_region' }, showText: 'Choose Shipping Region...' },
+  { label: 'Shipping Type*', name: 'shipping_id', type: 'select', validate: [ required ], component: SelectField, keyvalue: { key: '_id', value: 'shipping_type' }, showText: 'Choose Shipping Type...' },
   { label: 'Day Phone*', name: 'day_phone', type: 'text', validate: [ required, number ], component: TextField },
   { label: 'Evening Phone*', name: 'eve_phone', type: 'text', validate: [ required, number ], component: TextField },
   { label: 'Mobile Phone', name: 'mob_phone', type: 'text', validate: [ number ], component: TextField }

@@ -85,13 +85,13 @@ export const setProductAttribute = (attribute) =>
 const updateCartSummary = () =>
   (dispatch, getState, { dataCache }) => {
 
-    const calcSummary = (products) => {
+    const calcSummary = (products, shippingFee, tax) => {
       const initSummary = {
         subtotal: 0,
         discount: 0,
-        tax: 0,
-        shipping: 0,
-        grandtotal: 0
+        tax: tax,
+        shipping: shippingFee,
+        grandtotal: shippingFee + tax
       }
       return products.reduce((summary, product) => {
         let { subtotal, discount, grandtotal } = summary,
@@ -99,16 +99,24 @@ const updateCartSummary = () =>
         calcDiscount = discount + ((product.price - product.discounted_price) * product.quantity),
         calcGrandTotal = grandtotal + (product.discounted_price * product.quantity)
         return {
+          ...summary,
           subtotal: calcSubtotal,
           discount: calcDiscount,
-          tax: 0,
-          shipping: 0,
           grandtotal: calcGrandTotal
         }
       }, initSummary)
     }
 
-    dispatch(cartAction.calcTotalCart(calcSummary(getState().cart.products)))
+    let shippingFee = 0, tax = 0
+    // Get shipping fee from customer details form
+    if (getState().form.customerDetailsForm) {
+      const shippingRegionId = getState().form.customerDetailsForm.values.shipping_region_id
+      const shippingTypeId = getState().form.customerDetailsForm.values.shipping_id
+      if (shippingRegionId && shippingTypeId) {
+        shippingFee = getState().shipping.regions.filter(region => region._id === shippingRegionId)[0].ships.filter(ship => ship._id === shippingTypeId)[0].shipping_cost
+      }
+    }
+    dispatch(cartAction.calcTotalCart(calcSummary(getState().cart.products, shippingFee, tax)))
     dataCache.store({ key: SHOPPING_CART, value: getState().cart})
   }
 
@@ -190,4 +198,9 @@ export const searchProductsByText = (text) =>
       dispatch(searchAction.fetchSearchProducts(products.data))
     }
     dispatch(searchAction.stopSearch())
+  }
+
+export const updateShippingFee = () =>
+  (dispatch) => {
+    dispatch(updateCartSummary())
   }

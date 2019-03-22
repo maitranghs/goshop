@@ -4,6 +4,7 @@ import { connect } from 'react-redux'
 import classNames from 'classnames'
 
 import { customerDetails } from '../checkout/formFields'
+import { repeatPassword } from '../checkout/formValidations'
 import { register } from '../../actions'
 
 import { SUCCESS } from '../../actions/apiStatus'
@@ -53,7 +54,22 @@ class Register extends Component {
   }
 }
 
+const validate = (values) => {
+  let errors = {}, hasError = false
+
+  // Check password and repeat password
+  const repeatPasswordError = repeatPassword(values.password, values.repeat_password)
+  if (repeatPasswordError) {
+    errors.repeat_password = repeatPasswordError
+    hasError = true
+  }
+  
+  if (!hasError) return undefined
+  return errors
+}
+
 Register = reduxForm({
+  validate,
   form: 'registerForm',
   destroyOnUnmount: false
 })(Register)

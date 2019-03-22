@@ -44,7 +44,6 @@ module.exports = (app) => {
       {
         $sort: { 'values._id': -1 }
       },
-      
       {
         $project: { 'values.attribute_id': 0 }
       }
@@ -55,7 +54,22 @@ module.exports = (app) => {
 
   // Shipping regions
   app.get('/api/shippingregions', async (req, res) => {
-    const regions = await ShippingRegion.find({})
+    const regions = await ShippingRegion.aggregate([
+      {
+        $lookup: {
+          from: 'shippings',
+          localField: '_id',
+          foreignField: 'shipping_region_id',
+          as: 'ships'
+        }
+      },
+      {
+        $sort: { 'ships._id': -1 }
+      },
+      {
+        $project: { 'ships.shipping_region_id': 0 }
+      }
+    ])
 
     res.send(regions)
   })

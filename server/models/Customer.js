@@ -16,6 +16,10 @@ const CustomerSchema = Schema({
     type: Schema.Types.ObjectId,
     ref: 'ShippingRegion'
   },
+  shipping_id: {
+    type: Schema.Types.ObjectId,
+    ref: 'Shipping'
+  },
   day_phone: String,
   eve_phone: String,
   mob_phone: String
