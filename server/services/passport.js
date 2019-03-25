@@ -9,7 +9,7 @@ passport.serializeUser((customer, done) => {
 })
 
 passport.deserializeUser((id, done) => {
-  Customer.findById(id).then(customer => {
+  Customer.findById(id, { password: 0 }).then(customer => {
     done(null, customer)
   })
 })

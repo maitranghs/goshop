@@ -19,6 +19,17 @@ class CustomerDetails extends Component {
     this.handleChangedField = this.handleChangedField.bind(this)
   }
 
+  componentDidMount() {
+    const { shippingRegions, initialValues, updateShippingFee } = this.props
+    const initialShippingRegion = shippingRegions.filter(region => region._id === initialValues.shipping_region_id)
+    if(initialShippingRegion.length > 0) {
+      this.setState({
+        shippingTypes: initialShippingRegion[0].ships
+      })
+      updateShippingFee()
+    }
+  }
+
   handleChangedField(event, newValue) {
 
     const { shippingRegions, changeFieldValue, updateShippingFee } = this.props
@@ -104,6 +115,7 @@ CustomerDetails = reduxForm({
 const mapStateToProps = (state) => ({
   shippingRegions: state.shipping.regions,
   isLogged: Object.values(state.customer.current).length > 0,
+  initialValues: state.customer.current
 })
 
 const mapDispatchToProps = (dispatch) => ({

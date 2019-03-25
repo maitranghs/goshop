@@ -151,6 +151,11 @@ export const placeOrder = (history) =>
 
     dispatch(notificationAction.setModalContent('Information', 'Place an Order successfully.'))
     history.push('/')
+    // Get the customer newset information
+    if (Object.values(customer.current).length > 0) {
+      const { data: { data } } = await axios.get('/api/auth/current')
+      dispatch(customerAction.fetchCurrent(data))
+    }
   }
 
 export const doLogin = () =>

@@ -35,15 +35,14 @@ module.exports = (app) => {
     } else {
       // Check customer exist
       const existingCustomer = await Customer.findOne({ email: customer.email })
+      let customerObject = new Customer(customer)
       if (existingCustomer) {
-
         customer._id = existingCustomer._id
+        customer.password = customerObject.generateHash(customer.password)
         await Customer.findOneAndUpdate({ _id: customer._id }, customer)
       } else {
-        let customerObject = new Customer(customer)
-        customerObject.password = customerObject.generateHash(customer.password)
+        customerObject.password = customerObject.generateHash(customer.password)  
         await customerObject.save()
-
         customer._id = customerObject._id
       }
     }
