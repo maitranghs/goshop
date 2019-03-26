@@ -7,15 +7,12 @@ import { customerDetails } from '../checkout/formFields'
 import { repeatPassword } from '../checkout/formValidations'
 import { register } from '../../actions'
 
-import { SUCCESS } from '../../actions/apiStatus'
-
 class Register extends Component {
   render() {
-    const { submitRegister, register: { status, error } } = this.props
+    const { history, submitRegister, register: { error }, canSubmit } = this.props
     return (
       <main>
-        {status === SUCCESS ? this.props.history.push('/login'): ''}
-        {status !== SUCCESS && <div className="container">
+        <div className="container">
           <h5 className="center-align">Register</h5>
           <div className="container">
 
@@ -40,15 +37,15 @@ class Register extends Component {
             <div className="row">
               <div className="col s12 center-align">
                 <a href='#register'
-                  className={classNames('btn pink lighten-1', { 'disabled': !this.props.canSubmit })}
-                  onClick={(e) => {e.preventDefault(); submitRegister();}}>
+                  className={classNames('btn pink lighten-1', { 'disabled': !canSubmit })}
+                  onClick={(e) => {e.preventDefault(); submitRegister(history);}}>
                   Submit
                 </a>
               </div>
             </div>
             
           </div>
-        </div>}
+        </div>
       </main>
     )
   }
@@ -79,7 +76,7 @@ const mapStateToProps = (state) => ({
   canSubmit: state.form.registerForm && !state.form.registerForm.syncErrors
 })
 const mapDispatchToProps = (dispatch) => ({
-  submitRegister: () => dispatch(register())
+  submitRegister: (history) => dispatch(register(history))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register)

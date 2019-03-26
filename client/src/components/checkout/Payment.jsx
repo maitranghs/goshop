@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import { CardElement, injectStripe } from 'react-stripe-elements'
-
-import { CREATE_STRIPE_TOKEN } from '../../actions/type'
 
 class Payment extends Component {
   constructor(props) {
@@ -61,7 +58,4 @@ class Payment extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  setSripe: ({ token }) => dispatch({ type: CREATE_STRIPE_TOKEN, payload: { token } })
-})
-export default injectStripe(connect(null, mapDispatchToProps)(Payment))
+export default injectStripe(Payment)

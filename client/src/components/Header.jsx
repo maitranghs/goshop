@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 
-import { doLogout } from '../actions'
+import { doLogout, searchProductsByText } from '../actions'
 import { toggleShowSearchModal } from '../actions/search'
 
 import Search from './modals/Search';
 
 class Header extends Component {
   render() {
-    const { showSearch, cartNumber, isLogged, logout, openSearch } = this.props
+    const { cartNumber, isLogged, logout,
+            openSearch, searchState, search, close } = this.props
     return (
       <header>
         <nav className="top-nav grey lighten-5">
@@ -54,7 +55,7 @@ class Header extends Component {
             </div>
           </div>
         </nav>
-        {showSearch && <Search/>}
+        {searchState.show && <Search {...searchState} search={search} close={close}/>}
       </header>
     )
   }
@@ -64,10 +65,12 @@ const mapStateToProps = (state) => ({
   cartNumber: state.cart.products.reduce((total, product) => total + product.quantity, 0),
   current: state.customer.current,
   isLogged: Object.values(state.customer.current).length > 0,
-  showSearch: state.search.show
+  searchState: state.search
 })
 const mapDispatchToProps = (dispatch) => ({
   logout: () => dispatch(doLogout()),
-  openSearch: () => dispatch(toggleShowSearchModal(true))
+  openSearch: () => dispatch(toggleShowSearchModal(true)),
+  search: (text) => dispatch(searchProductsByText(text)),
+  close: () => dispatch(toggleShowSearchModal(false))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Header)

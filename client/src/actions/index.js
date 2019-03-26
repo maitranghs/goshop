@@ -158,7 +158,7 @@ export const placeOrder = (history) =>
     }
   }
 
-export const doLogin = () =>
+export const doLogin = (history) =>
   async (dispatch, getState, { axios }) => {
     const loginForm = getState().form.loginForm
     const { data: { status, error } } = await axios.post('/api/auth/login', loginForm.values)
@@ -167,6 +167,7 @@ export const doLogin = () =>
       const { data: { data } } = await axios.get('/api/auth/current')
       dispatch(customerAction.fetchCurrent(data))
       dispatch(notificationAction.setModalContent('Information', 'You have logged in.'))
+      history.push('/')
     }
     if (status === FAIL) {
       dispatch(customerAction.loginFail(status, error))
@@ -180,13 +181,14 @@ export const doLogout = () =>
     dispatch(notificationAction.setModalContent('Information', 'You have logged out.'))
   }
 
-export const register = () =>
+export const register = (history) =>
   async (dispatch, getState, { axios }) => {
     const registerForm = getState().form.registerForm
     const { data: { status, error } } = await axios.post('/api/auth/register', registerForm.values)
     if (status === SUCCESS) {
       dispatch(customerAction.registerSuccess(status))
       dispatch(notificationAction.setModalContent('Information', 'You have registered. Please login.'))
+      history.push('/login')
     }
     if (status === FAIL) {
       dispatch(customerAction.registerFail(status, error))

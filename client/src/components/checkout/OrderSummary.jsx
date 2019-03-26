@@ -1,5 +1,4 @@
 import React, { Component } from  'react'
-import { connect } from 'react-redux'
 
 import CartProduct from '../cart/CartProduct'
 import CartSummary from '../cart/CartSummary'
@@ -21,8 +20,4 @@ class OrderSummary extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  products: state.cart.products,
-  summary: state.cart.summary
-})
-export default connect(mapStateToProps)(OrderSummary)
+export default OrderSummary

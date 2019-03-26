@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 
-import { setSearchCondition } from '../../actions'
 import Loading from '../Loading'
 import Attribute from './Attribute'
 
@@ -13,7 +11,7 @@ class Filter extends Component {
     }
   }
   render() {
-    const { attributes, conditionAttributes, setSearchCondition } = this.props,
+    const { attributes, conditionAttributes, setSearchCondition, setSearchAttributeCondition } = this.props,
       priceList = [
         {
           price: { from: 0, to: 15 },
@@ -36,7 +34,9 @@ class Filter extends Component {
         <h5 className="left-align blue-grey-text text-darken-3">Filter</h5>
         <div className="divider"></div>
         {attributes.length === 0 && <Loading/>}
-        {attributes.length > 0 && attributes.map((att, idx) => <Attribute attributes={conditionAttributes} attribute={att} key={idx}/>)}
+        {attributes.length > 0 && attributes.map((att, idx) => 
+          <Attribute attributes={conditionAttributes} attribute={att} key={idx}
+            setSearchAttributeCondition={setSearchAttributeCondition}/>)}
 
         <div className="section">
           <h6>Price</h6>
@@ -64,11 +64,4 @@ class Filter extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  attributes: state.attributes,
-  conditionAttributes: state.products.options.attributes
-})
-const mapDispatchToProps = (dispatch) => ({
-  setSearchCondition: (option) => dispatch(setSearchCondition(option))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Filter)
+export default Filter

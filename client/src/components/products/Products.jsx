@@ -9,7 +9,7 @@ import Breadcrumb from '../Breadcrumb'
 import Loading from '../Loading'
 import Pagination from './Pagination'
 
-import { searchProducts, setPaginationIndex } from '../../actions'
+import { searchProducts, setPaginationIndex, setSearchCondition, setSearchAttributeCondition } from '../../actions'
 
 class Products extends Component {
 
@@ -18,14 +18,24 @@ class Products extends Component {
     getProducts()
   }
   render() {
-    const { products, total, pageTotal, index, isLoading, setPaginationIndex } = this.props
+    const { products, total, pageTotal, index, isLoading,
+            attributes, conditionAttributes,
+            departments, chosenDeparmentId, chosenCategoryId,
+            setPaginationIndex,
+            setSearchCondition, setSearchAttributeCondition } = this.props
     return (
       <main>
         <div className="container">
           <div className="row">
             <div className="col s3">
-              <Departments/>
-              <Filter/>
+              <Departments departments={departments}
+                chosenDeparmentId={chosenDeparmentId}
+                chosenCategoryId={chosenCategoryId}
+                setSearchCondition={setSearchCondition}/>
+              <Filter attributes={attributes}
+                conditionAttributes={conditionAttributes}
+                setSearchCondition={setSearchCondition}
+                setSearchAttributeCondition={setSearchAttributeCondition}/>
             </div>
             <div className="col s9">
               {false && <Breadcrumb/>}
@@ -58,11 +68,18 @@ const mapStateToProps = (state) => ({
   total: state.products.total,
   pageTotal: state.products.pageTotal,
   index: state.products.options.paginate.index,
-  isLoading: state.products.isLoading
+  isLoading: state.products.isLoading,
+  attributes: state.attributes,
+  conditionAttributes: state.products.options.attributes,
+  departments: state.departments,
+  chosenDeparmentId: state.products.options.department_id,
+  chosenCategoryId: state.products.options.category_id
 })
 const mapDispatchToProps = (dispatch) => ({
   getProducts: () => dispatch(searchProducts()),
-  setPaginationIndex: (index) => dispatch(setPaginationIndex(index))
+  setPaginationIndex: (index) => dispatch(setPaginationIndex(index)),
+  setSearchCondition: (option) => dispatch(setSearchCondition(option)),
+  setSearchAttributeCondition: (option) => dispatch(setSearchAttributeCondition(option))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Products)

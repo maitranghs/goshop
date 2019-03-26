@@ -9,6 +9,7 @@ import Review from './Review'
 import OrderSummary from './OrderSummary'
 
 import { placeOrder } from '../../actions'
+import { CREATE_STRIPE_TOKEN } from '../../actions/type'
 
 class Checkout extends Component {
   constructor(props) {
@@ -18,6 +19,7 @@ class Checkout extends Component {
     }
   }
   render() {
+    const { history, customerDetailsFormErrors, reviewFormErrors, products, summary, placeOrder, setSripe } = this.props
     return (
       <StripeProvider apiKey="pk_test_TYooMQauvdEDq54NiTphI7jx">
       <main>
@@ -28,22 +30,22 @@ class Checkout extends Component {
               <CustomerDetails/>
 
               <Elements>
-                <Payment validate={(hasErrors) => this.setState({ paymentErrors: hasErrors })}/>
+                <Payment validate={(hasErrors) => this.setState({ paymentErrors: hasErrors })} setSripe={setSripe}/>
               </Elements>
               
               <Review/>
               
               <a href="#place_the_order"
                 className={classNames("btn right pink lighten-1",
-                  { 'disabled': this.state.paymentErrors || this.props.customerDetailsFormErrors || this.props.reviewFormErrors })}
-                onClick={(e) => {e.preventDefault();this.props.placeOrder(this.props.history)}}>
+                  { 'disabled': this.state.paymentErrors || customerDetailsFormErrors || reviewFormErrors })}
+                onClick={(e) => {e.preventDefault();placeOrder(history)}}>
                 Place The Order
               </a>
             </div>
           </div>
           <div className="col s5 m5 l5">
             <div className="row"><h5>Order Summary</h5></div>
-            <OrderSummary/>
+            <OrderSummary products={products} summary={summary}/>
           </div>
         </div>
       </main>
@@ -54,9 +56,12 @@ class Checkout extends Component {
 
 const mapStateToProps = (state) => ({
   customerDetailsFormErrors: state.form.customerDetailsForm && state.form.customerDetailsForm.syncErrors,
-  reviewFormErrors: state.form.reviewForm && state.form.reviewForm.syncErrors
+  reviewFormErrors: state.form.reviewForm && state.form.reviewForm.syncErrors,
+  products: state.cart.products,
+  summary: state.cart.summary
 })
 const mapDispatchToProps = (dispatch) => ({
-  placeOrder: (history) => dispatch(placeOrder(history))
+  placeOrder: (history) => dispatch(placeOrder(history)),
+  setSripe: ({ token }) => dispatch({ type: CREATE_STRIPE_TOKEN, payload: { token } })
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Checkout)

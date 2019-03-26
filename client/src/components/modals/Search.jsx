@@ -1,13 +1,19 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-
-import { toggleShowSearchModal } from '../../actions/search'
-import { searchProductsByText } from '../../actions'
+import React, { Component, createRef } from 'react'
 
 import Product from '../products/Product'
 import Loading from '../Loading'
 
 class Search extends Component {
+  constructor(props) {
+    super(props)
+
+    this.searchInput = createRef()
+  }
+
+  componentDidMount() {
+    this.searchInput.current.focus()
+  }
+
   render() {
     const { loading, products, search, close } = this.props
     const total = products.length
@@ -17,7 +23,7 @@ class Search extends Component {
           <div className="modal-content">
             <div className="search-input-group">
               <i className="material-icons search-icon">search</i>
-              <input type='text' placeholder='Search products...' onChange={(e) => search(e.target.value)}/>
+              <input type='text' ref={this.searchInput} placeholder='Search products...' onChange={(e) => search(e.target.value)}/>
             </div>
             {loading && <Loading/>}
             {!loading && total === 0 && 
@@ -42,9 +48,5 @@ class Search extends Component {
     )
   }
 }
-const mapStateToProps = (state) => (state.search)
-const mapDispatchToProps = (dispatch) => ({
-  search: (text) => dispatch(searchProductsByText(text)),
-  close: () => dispatch(toggleShowSearchModal(false))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Search)
+
+export default Search

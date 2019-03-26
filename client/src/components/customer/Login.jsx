@@ -8,10 +8,9 @@ import { doLogin } from '../../actions'
 
 class Login extends Component {
   render() {
-    const { submitLogin, login: { error }, isLoggedIn } = this.props
+    const { history, submitLogin, login: { error } } = this.props
     return (
       <main>
-        {isLoggedIn ? this.props.history.push('/'): ''}
         <div className="container">
           <h5 className="center-align">Login</h5>
           <div className="container">
@@ -39,7 +38,7 @@ class Login extends Component {
               <div className="col s12 center-align">
                 <a href='#login'
                   className={classNames('btn pink lighten-1', { 'disabled': !this.props.canSubmit })}
-                  onClick={(e) => {e.preventDefault(); submitLogin();}}>
+                  onClick={(e) => {e.preventDefault(); submitLogin(history);}}>
                   Submit
                 </a>
               </div>
@@ -59,11 +58,10 @@ Login = reduxForm({
 
 const mapStateToProps = (state) => ({
   login: state.customer.login,
-  canSubmit: state.form.loginForm && !state.form.loginForm.syncErrors,
-  isLoggedIn: Object.values(state.customer.current).length > 0
+  canSubmit: state.form.loginForm && !state.form.loginForm.syncErrors
 })
 const mapDispatchToProps = (dispatch) => ({
-  submitLogin: () => dispatch(doLogin())
+  submitLogin: (history) => dispatch(doLogin(history))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

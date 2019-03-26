@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { setSearchAttributeCondition } from '../../actions'
 import classNames from "classnames"
 
 class Attribute extends Component {
@@ -48,7 +46,4 @@ class Attribute extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch) => ({
-  setSearchAttributeCondition: (option) => dispatch(setSearchAttributeCondition(option))
-})
-export default connect(null, mapDispatchToProps)(Attribute)
+export default Attribute

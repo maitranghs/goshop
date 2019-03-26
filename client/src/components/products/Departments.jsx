@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import classNames from "classnames"
 
 import Loading from '../Loading'
-import { setSearchCondition } from '../../actions'
 
 class Departments extends Component {
 
@@ -60,14 +58,4 @@ class Departments extends Component {
   
 }
 
-const mapStateToProps = (state) => ({
-  departments: state.departments,
-  chosenDeparmentId: state.products.options.department_id,
-  chosenCategoryId: state.products.options.category_id
-})
-
-const mapDispatchToProps = (dispatch) => ({
-  setSearchCondition: (option) => dispatch(setSearchCondition(option))
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(Departments)
+export default Departments
