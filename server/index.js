@@ -23,6 +23,7 @@ require('./models/Tax')
 //review
 
 require('./services/passport')
+require('./services/cache')
 
 const app = express()
 app.use(bodyParser.json())

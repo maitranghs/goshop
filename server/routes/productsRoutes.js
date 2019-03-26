@@ -24,7 +24,7 @@ module.exports = (app) => {
       {
         $sort: { '_id': 1, 'categories.name': 1 }
       }
-    ])
+    ]).cache()
 
     res.send(departments)
   })
@@ -47,7 +47,7 @@ module.exports = (app) => {
       {
         $project: { 'values.attribute_id': 0 }
       }
-    ])
+    ]).cache()
     res.send(attributes) 
 
   })
@@ -69,7 +69,7 @@ module.exports = (app) => {
       {
         $project: { 'ships.shipping_region_id': 0 }
       }
-    ])
+    ]).cache()
 
     res.send(regions)
   })
