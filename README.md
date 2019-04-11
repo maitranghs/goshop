@@ -1,6 +1,6 @@
 # goshop
 
-This is a very simple e-commercial application is written in React and Node JS.
+This is a simple e-commercial application is written in React and Node JS.
 
 ## 1. Features
 - List all products with pagination
@@ -11,6 +11,7 @@ This is a very simple e-commercial application is written in React and Node JS.
 - Go to checkout page from shopping cart page
 - Fill form, place an order and send email to customer
 - Register / Login / logout with custom form
+- Test main functions
 
 ## 2. Using technologies
 ### 2.1 Client side - React
@@ -23,7 +24,7 @@ This is a very simple e-commercial application is written in React and Node JS.
 - Redux-form to handle form easier
 - Redux-thunk, a middleware to handle asynchronous actions in redux
 - React-scripts to handle test, run, build react application
-- Shopping cart will be saved in localstorage in order to keep cart information available everytime user comeback to the site. Only delete when place an order successfully.
+- Shopping cart information will be saved in mongoDB, while cart token, to retrieve/ update/ delete cart information, will be saved in localstorage.
 
 ### 2.2 Server side - NodeJS
 - Bcrypt to encrypt and check valid customer's password
@@ -33,7 +34,4 @@ This is a very simple e-commercial application is written in React and Node JS.
 - Nodemailer to handle sending mail
 - Passport, passport-local to handle authorization
 - Stripe to purchase
-
-## 3. TODO features
-- Test main functions
 - Redis to cache result of departments, attributes, shippingregions in order to avoid access to DB to much
