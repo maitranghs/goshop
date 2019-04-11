@@ -13,14 +13,15 @@ require('./models/ProductCategory')
 require('./models/Attribute')
 require('./models/AttributeValue')
 require('./models/ProductAttribute')
-//shopping_cart
+require('./models/ShoppingCart')
+require('./models/CartProduct')
 require('./models/Order')
 require('./models/OrderDetail')
 require('./models/ShippingRegion')
 require('./models/Customer')
 require('./models/Shipping')
 require('./models/Tax')
-//review
+// require('./models/Review')
 
 require('./services/passport')
 require('./services/cache')
@@ -40,6 +41,7 @@ require('./routes/productsRoutes')(app)
 require('./routes/ordersRoutes')(app)
 require('./routes/authRoutes')(app)
 require('./routes/cutomerRoutes')(app)
+require('./routes/cartRoutes')(app)
 
 const PORT = process.env.PORT || 5000
 app.listen(PORT, () => {

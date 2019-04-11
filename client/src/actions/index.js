@@ -10,7 +10,7 @@ import * as searchAction from './search'
 
 import { SUCCESS, FAIL } from './apiStatus'
 
-export const SHOPPING_CART = 'SHOPPING_CART'
+const SHOPPING_CART_TOKEN = 'SHOPPING_CART_TOKEN'
 
 export const searchProducts = () =>
   async (dispatch, getState, { axios }) => {
@@ -38,12 +38,19 @@ export const initApp = () =>
       dispatch(customerAction.fetchCurrent(data))
     }
 
-    let cart = dataCache.load({ key: SHOPPING_CART })
-    if (!cart) {
-      cart = { products: [], summary: {} }
-      dataCache.store({ key: SHOPPING_CART, value: cart })
+    let token = dataCache.load({ key: SHOPPING_CART_TOKEN })
+    if (!token) {
+      const cart = await axios.get('/api/cart/token')
+      token = cart.data.token
+      dataCache.store({ key: SHOPPING_CART_TOKEN, value: cart.data.token })
     }
-    dispatch(cartAction.initializeCart(cart))
+    dispatch(getCartInformation(token))
+  }
+
+const getCartInformation = (token) =>
+  async (dispatch, getState, { axios }) => {
+    const cartResponse = await axios.post('/api/cart/info', { token })
+    dispatch(cartAction.fetchCart(cartResponse.data))
   }
 
 export const setSearchCondition = (option) =>
@@ -82,55 +89,23 @@ export const setProductAttribute = (attribute) =>
     dispatch(productDetailAction.updateProductSku(sku))
   }
 
-const updateCartSummary = () =>
-  (dispatch, getState, { dataCache }) => {
-
-    const calcSummary = (products, shippingFee, tax) => {
-      const initSummary = {
-        subtotal: 0,
-        discount: 0,
-        tax: tax,
-        shipping: shippingFee,
-        grandtotal: shippingFee + tax
-      }
-      return products.reduce((summary, product) => {
-        let { subtotal, discount, grandtotal } = summary,
-        calcSubtotal = subtotal + (product.price * product.quantity),
-        calcDiscount = discount + ((product.price - product.discounted_price) * product.quantity),
-        calcGrandTotal = grandtotal + (product.discounted_price * product.quantity)
-        return {
-          ...summary,
-          subtotal: calcSubtotal,
-          discount: calcDiscount,
-          grandtotal: calcGrandTotal
-        }
-      }, initSummary)
-    }
-
-    let shippingFee = 0, tax = 0
-    // Get shipping fee from customer details form
-    if (getState().form.customerDetailsForm) {
-      const shippingRegionId = getState().form.customerDetailsForm.values.shipping_region_id
-      const shippingTypeId = getState().form.customerDetailsForm.values.shipping_id
-      if (shippingRegionId && shippingTypeId) {
-        shippingFee = getState().shipping.regions.filter(region => region._id === shippingRegionId)[0].ships.filter(ship => ship._id === shippingTypeId)[0].shipping_cost
-      }
-    }
-    dispatch(cartAction.calcTotalCart(calcSummary(getState().cart.products, shippingFee, tax)))
-    dataCache.store({ key: SHOPPING_CART, value: getState().cart})
-  }
-
 export const addToCart = (product) =>
-  (dispatch) => {
-    dispatch(cartAction.addToCart(product))
-    dispatch(updateCartSummary())
+  async (dispatch, getState, { axios, dataCache }) => {
+
+    const token = dataCache.load({ key: SHOPPING_CART_TOKEN })
+    await axios.post('/api/cart/add', { token, product })
+    dispatch(getCartInformation(token))
+
     dispatch(notificationAction.setModalContent('Shopping Cart', 'Product has been added.'))
   }
 
 export const removeFromCart = (product) =>
-  (dispatch) => {
-    dispatch(cartAction.removeFromCart(product))
-    dispatch(updateCartSummary())
+  async (dispatch, getState, { axios, dataCache }) => {
+
+    const token = dataCache.load({ key: SHOPPING_CART_TOKEN })
+    await axios.post('/api/cart/remove', { token, product_id: product._id, sku: product.sku })
+    dispatch(getCartInformation(token))
+
     dispatch(notificationAction.setModalContent('Shopping Cart', 'Product has been removed.'))
   }
 
@@ -144,10 +119,9 @@ export const placeOrder = (history) =>
       token: stripe.token
     })
 
-    // Reset cart
-    const initialState = { products: [], summary: {} }
-    dataCache.store({ key: SHOPPING_CART, value: initialState })
-    dispatch(cartAction.initializeCart(initialState))
+    const token = dataCache.load({ key: SHOPPING_CART_TOKEN })
+    await axios.put('/api/cart/reset', { token })
+    dispatch(getCartInformation(token))
 
     dispatch(notificationAction.setModalContent('Information', 'Place an Order successfully.'))
     history.push('/')
@@ -208,6 +182,20 @@ export const searchProductsByText = (text) =>
   }
 
 export const updateShippingFee = () =>
-  (dispatch) => {
-    dispatch(updateCartSummary())
+  async (dispatch, getState, { axios, dataCache }) => {
+
+    let shippingFee = 0, tax = 0
+    // Get shipping fee from customer details form
+    if (getState().form.customerDetailsForm) {
+      const shippingRegionId = getState().form.customerDetailsForm.values.shipping_region_id
+      const shippingTypeId = getState().form.customerDetailsForm.values.shipping_id
+      if (shippingRegionId && shippingTypeId) {
+        shippingFee = getState().shipping.regions.filter(region => region._id === shippingRegionId)[0].ships.filter(ship => ship._id === shippingTypeId)[0].shipping_cost
+      }
+    }
+
+    const token = dataCache.load({ key: SHOPPING_CART_TOKEN })
+    await axios.put('/api/cart', { token, shipping_fee: shippingFee, tax })
+    dispatch(getCartInformation(token))
+
   }

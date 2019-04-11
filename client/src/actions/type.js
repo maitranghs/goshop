@@ -17,10 +17,7 @@ export const SET_DEPARTMENTS = 'SET_DEPARTMENTS'
 // Attributes
 export const SET_ATTRIBUTES = 'SET_ATTRIBUTES'
 // Carts
-export const INITIALIZE_CART = 'INITIALIZE_CART'
-export const ADD_TO_CART = 'ADD_TO_CART'
-export const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
-export const CALCULATE_TOTAL_CART = 'CALCULATE_TOTAL_CART'
+export const FETCH_CART = 'FETCH_CART'
 // Shipping
 export const FETCH_SHIPPING_REGIONS = 'FETCH_SHIPPING_REGIONS'
 // Stripe
